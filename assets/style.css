@@ -401,7 +401,24 @@ p {
 .fa {
 	padding-right: 15px;
 }
-
+#login {
+	margin-top: 12vh;
+}
+.gray {
+	color: #666;
+	padding-bottom: 10px;
+	font-weight: 700;
+}
+.custom-form {
+	border: 1px solid #666;
+	padding: 15px;
+	background-color: #fafafa;
+}
+.register-p {
+	padding-top: 15px;
+	padding-bottom: 0px;
+	text-align: right;
+}
 
 
 
