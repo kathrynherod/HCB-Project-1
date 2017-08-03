@@ -1,4 +1,4 @@
-firebase.auth();
+
 $("#login-btn").on("click", function() {
 
 	var email = $("#login-email").val().trim();
