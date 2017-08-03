@@ -12,7 +12,7 @@ firebase.initializeApp(config);
 
 //rename firebase to database
 var database = firebase.database();
-
+var auth = firebase.auth();
 
 //global variables
 var userName = "";
@@ -60,3 +60,18 @@ $("#register-btn").on("click", function() {
 
     });
 })
+
+$("#login-btn").on("click", function() {
+    
+    
+    var email = $("#login-email").val().trim();
+    var password = $("#login-pw").val().trim();
+
+    auth.signInWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log("Error Code " + errorCode);
+        console.log("Error Msg " + errorMessage);
+    });
+    })
