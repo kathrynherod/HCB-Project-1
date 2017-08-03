@@ -9,6 +9,7 @@ var config = {
 };
 //this uses the info in config and passes into the function calling firebase
 firebase.initializeApp(config);
+
 //rename firebase to database
 var database = firebase.database();
 

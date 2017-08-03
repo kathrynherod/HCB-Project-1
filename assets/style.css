@@ -450,10 +450,7 @@ p {
 .usr-info-row {
 	padding: 5px;
 }
-#user-name {
-	text-align: center;
-	padding-top: 15px;
-}
+
 #user-location {
 	text-align: right;
 	padding-top: 15px;
