@@ -1,77 +1,95 @@
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyDOjDpYcoEnBzdA5y3d6EPrRcmMzIq5aBc",
-    authDomain: "groupproject1-4b4d1.firebaseapp.com",
-    databaseURL: "https://groupproject1-4b4d1.firebaseio.com",
-    projectId: "groupproject1-4b4d1",
-    storageBucket: "groupproject1-4b4d1.appspot.com",
-    messagingSenderId: "345420353976"
-};
-//this uses the info in config and passes into the function calling firebase
-firebase.initializeApp(config);
+(function() {
 
-//rename firebase to database
-var database = firebase.database();
-var auth = firebase.auth();
 
-//global variables
-var userName = "";
-var email = "";
-var password = "";
-var firstName = "";
-var lastName = "";
-var age = "";
-var zipCode = "";
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyDOjDpYcoEnBzdA5y3d6EPrRcmMzIq5aBc",
+        authDomain: "groupproject1-4b4d1.firebaseapp.com",
+        databaseURL: "https://groupproject1-4b4d1.firebaseio.com",
+        projectId: "groupproject1-4b4d1",
+        storageBucket: "groupproject1-4b4d1.appspot.com",
+        messagingSenderId: "345420353976"
+    };
+    //this uses the info in config and passes into the function calling firebase
+    firebase.initializeApp(config);
 
-//when user clicks register button
-$("#register-btn").on("click", function() {
+    //rename firebase to database
+    var database = firebase.database();
+    var auth = firebase.auth();
 
-    //stop page from refreshing
-    event.preventDefault();
-
+    //global variables
     //grab the user's input from the page
-    userName = $("#user-name").val().trim();
-    email = $("#user-email").val().trim();
-    password = $("#user-pw").val().trim();
-    firstName = $("#user-first").val().trim();
-    lastName = $("#user-last").val().trim();
-    age = $("#user-age").val().trim();
-    zipCode = $("#user-zip").val().trim();
+    var email = "";
+    var password = "";
 
-    //this is the authentication email and password check provided by firebase
-    //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ...
-    }); 
+    //when user clicks register button
+    $("#register-btn").on("click", function() {
 
-    //send that input to our database
-    database.ref().push({
+        //grab the user's input from the page
+        var userName = $("#user-name").val().trim();
+        email = $("#user-email").val().trim();
+        password = $("#user-pw").val().trim();
+        var firstName = $("#user-first").val().trim();
+        var lastName = $("#user-last").val().trim();
+        var age = $("#user-age").val().trim();
+        var zipCode = $("#user-zip").val().trim();
 
-        UserName: userName,
-        Email: email,
-        Password: password,
-        FirstName: firstName,
-        LastName: lastName,
-        Age: age,
-        ZipCode: zipCode
+        //this is the authentication email and password check provided by firebase
+        //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
+        var promise = auth.createUserWithEmailAndPassword(email, password);
+        promise.catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorMessage);
+            // ...
+        });
 
-    });
-})
+        var user = firebase.auth().currentUser;
+        console.log(user);
 
-$("#login-btn").on("click", function() {
-    
-    
-    var email = $("#login-email").val().trim();
-    var password = $("#login-pw").val().trim();
+        user.updateProfile({
 
-    auth.signInWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log("Error Code " + errorCode);
-        console.log("Error Msg " + errorMessage);
-    });
+            displayName: userName,
+            photoURL: "",
+
+        }).then(function() {
+            console.log("success");
+            // Update successful.
+        }).catch(function(error) {
+            console.log("error");
+        });
     })
+
+    //watches for login/logout of user
+    auth.onAuthStateChanged(firebaseUser => {
+        if (firebaseUser) {
+            console.log("logged in");
+        } else {
+            console.log("not logged in")
+        }
+    })
+
+    //when user clicks logout button
+    $("#logout-btn").on("click", function() {
+        auth.signOut();
+    })
+
+    //when user clicks login button
+    $("#login-btn").on("click", function() {
+
+        email = $("#login-email").val().trim();
+        password = $("#login-pw").val().trim();
+        var promise = auth.signInWithEmailAndPassword(email, password)
+
+        promise.catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log("Error Code " + errorCode);
+            console.log("Error Msg " + errorMessage);
+        });
+    })
+
+
+}());
