@@ -23,8 +23,8 @@
     var password = "";
 
     //when user clicks register button
-    $("#register-btn").on("click", function() {
-        preventDefault();
+    $("#register-btn").on("click", function(e) {
+        e.preventDefault();
 
         //grab the user's input from the page
         var userName = $("#user-name").val().trim();
@@ -77,8 +77,8 @@
     })
 
     //when user clicks login button
-    $("#login-btn").on("click", function() {
-        preventDefault();
+    $("#login-btn").on("click", function(e) {
+        e.preventDefault();
 
         email = $("#login-email").val().trim();
         password = $("#login-pw").val().trim();
