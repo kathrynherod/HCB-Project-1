@@ -36,7 +36,16 @@ $("#register-btn").on("click", function() {
     firstName = $("#user-first").val().trim();
     lastName = $("#user-last").val().trim();
     age = $("#user-age").val().trim();
-    zipcode = $("#user-zip").val().trim();
+    zipCode = $("#user-zip").val().trim();
+
+    //this is the authentication email and password check provided by firebase
+    //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
+    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+    });
 
     //send that input to our database
     database.ref().push({
@@ -48,5 +57,6 @@ $("#register-btn").on("click", function() {
         LastName: lastName,
         Age: age,
         ZipCode: zipCode
+
     });
 })
