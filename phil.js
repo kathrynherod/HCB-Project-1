@@ -24,6 +24,7 @@
 
     //when user clicks register button
     $("#register-btn").on("click", function() {
+        preventDefault();
 
         //grab the user's input from the page
         var userName = $("#user-name").val().trim();
@@ -77,10 +78,11 @@
 
     //when user clicks login button
     $("#login-btn").on("click", function() {
+        preventDefault();
 
         email = $("#login-email").val().trim();
         password = $("#login-pw").val().trim();
-        var promise = auth.signInWithEmailAndPassword(email, password)
+        var promise = auth.signInWithEmailAndPassword(email, password);
 
         promise.catch(function(error) {
             // Handle Errors here.
