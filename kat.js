@@ -21,4 +21,25 @@ firebase.auth().onAuthStateChanged(function(user) {
     // User is signed out.
     // ...
   }
-});*/
+});
+
+  function writeUserData(userName, email, password, firstName, lastName, age, zipCode) {
+        firebase.database().ref('users/' + userId).set({
+            UserName: userName,
+            Email: email,
+            Password: password,
+            FirstName: firstName,
+            LastName: lastName,
+            Age: age,
+            ZipCode: zipCode
+        });
+    }
+
+
+
+
+*/
+
+ //send that input to our database
+  
+

@@ -45,7 +45,7 @@ $("#register-btn").on("click", function() {
         var errorCode = error.code;
         var errorMessage = error.message;
         // ...
-    });
+    }); 
 
     //send that input to our database
     database.ref().push({
