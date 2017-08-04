@@ -7,11 +7,8 @@ var manageUsers = {
         this.renderDom(database);
         this.userState(database);
         this.handleClicks(database);
-        this.userProfile(database);
     },
-
-    renderDom: function(database) {
-    },
+    renderDom: function(database) {},
     userPromise: function(email, password) {
         var promise = firebase.auth().signInWithEmailAndPassword(email, password);
         promise.catch(function(error) {
@@ -23,32 +20,24 @@ var manageUsers = {
     },
     userRegister: function() {
         //grab the user's input from the page
-
         email = $("#user-email").val().trim();
         password = $("#user-pw").val().trim();
-
         //this is the authentication email and password check provided by firebase
         //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .catch(function(error) {
-                // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(errorMessage);
-                // ...
             });
-
         var user = firebase.auth().currentUser;
         console.log(user);
-
         manageUsers.writeUserData(user, userName, email, firstName, lastName, age, zipCode);
-
         firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
                 window.location.href = "profile.html";
             }
         })
-
     },
     userState: function(database) {
         firebase.auth().onAuthStateChanged(firebaseUser => {
@@ -56,12 +45,11 @@ var manageUsers = {
                 console.log("logged in ");
                 console.log(firebaseUser);
                 manageUsers.handleClicks(database, firebaseUser);
+                manageUsers.userProfile(database,firebaseUser);
             } else {
                 console.log("not logged in")
             }
         })
-        firebase.database().ref(snapshot);
-        console.log(snapshot)
     },
     handleClicks: function(database, firebaseUser) {
         //register
@@ -76,9 +64,7 @@ var manageUsers = {
 
             email = $("#login-email").val().trim();
             password = $("#login-pw").val().trim();
-
             manageUsers.userPromise(email, password);
-
             firebase.auth().onAuthStateChanged(firebaseUser => {
                 if (firebaseUser) {
                     window.location.href = "profile.html";
@@ -93,7 +79,7 @@ var manageUsers = {
         //update info
         $("#submit-changes-btn").on("click", function(e, database) {
             e.preventDefault();
-            
+
             var userName = $("#user-name").val().trim();
             var firstName = $("#user-first").val().trim();
             var lastName = $("#user-last").val().trim();
@@ -109,14 +95,12 @@ var manageUsers = {
                 Age: age,
                 ZipCode: zipCode
             });
-
             $("#update-profile").hide();
-            
         })
-
     },
     writeUserData: function(user, userName, email, firstName, lastName, age, zipCode) {
         firebase.database().ref('users/' + user.uid).set({
+            uID: currentUser.uid,
             UserName: userName,
             Email: email,
             FirstName: firstName,
@@ -125,15 +109,16 @@ var manageUsers = {
             ZipCode: zipCode
         });
     },
-    userProfile: function(database) {
+    userProfile: function(database,user) {
+        var currentUser = firebase.auth().currentUser;
+        console.log(currentUser);
 
-        //var users = database.currentUser;        
-        //$("#user-first-name").text(users.uID);
+        database.ref('/users/' + currentUser.uID).on('child_added', function(user) {
+            var userInfo = user.toJSON();
 
-
-
+            console.log('Welcome ' + userInfo.FirstName);
+        });
     }
-
 }
 var config = {
     apiKey: "AIzaSyDOjDpYcoEnBzdA5y3d6EPrRcmMzIq5aBc",
