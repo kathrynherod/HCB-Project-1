@@ -117,7 +117,7 @@ var manageUsers = {
             var lastName = $("#user-last-input").val().trim();
             var age = $("#user-age-input").val().trim();
             var zipCode = $("#user-zip-input").val().trim();
-
+            var currentUser = firebase.auth().currentUser;
             firebase.database().ref('/users/' + currentUser.uid).set({
 
                 uID: currentUser.uid,
