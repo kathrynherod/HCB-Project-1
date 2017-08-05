@@ -19,6 +19,7 @@
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="assets/style.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 
 <body>
@@ -66,33 +67,36 @@
                     <img src="https://filmandpixel.files.wordpress.com/2012/02/starbucks-focused.jpg" class="img-thumbnail" width="210" height="200">
 
                     <img src="https://filmandpixel.files.wordpress.com/2012/02/starbucks-focused.jpg" class="img-thumbnail" width="210" height="200">
-
-
                 </div>
 
                 <div class="col-6 col-md-4">
-                    <h2 style="color:black"> Contest Name </h2>
+                    <h2 style="color:black"> Starbucks </h2>
 
-                    <p id="description">
+                    <p id="descriptionContainer">
+
                         Relevant information would go here such as the number of likes,
                         type of contest, expiration date, location, company website, give aways,
                         enter button, return policy
+
                     </p>
-                    <div id="expirationDate"></div>
-                    <div id="location"></div>
-                    <div id="companyWebsite"></div>
-                    <div id="returnPolicy"
+                    <div id="expirationDateContainer">Contest Expires: <span id="expires"></span></div><br>
+                    <div id="giveAwayContainer"> Give Aways: <span id="giveAways"></span> </div>
+                    <div id="location"></div> <br>
+                    
+                    <div id="likesContainer">Likes: <span id="likes"></span></div><br>
+                    <div id="companyWebsite"><a href = "https://www.starbucks.com/">Click here to view out Website!</a></div> <br>
 
                     
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-secondary">Like</button>
-                        <button type="button" class="btn btn-secondary">Share</button>
+                        <button type="button" class="btn btn-secondary" id="like-button">Like</button>
+                        <button type="button" class="btn btn-secondary" id="share-button">Share</button>
                     </div>
+
 
                 </div>
 
             </div> 
-            sds
+            
         </div>
     </div>
     <!--Contact Ends-->
@@ -128,6 +132,9 @@
     <script src="assets/gallery/jquery.blueimp-gallery.min.js"></script>
     <!-- custom script -->
     <script src="assets/script.js"></script>
+    <!--<script src="assets/jLubos.js"></script> -->
+    <script src="assets/justin.js"></script>
+
 </body>
 
 </html>
