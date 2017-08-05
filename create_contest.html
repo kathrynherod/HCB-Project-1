@@ -30,7 +30,7 @@
                 <div class="container">
                     <div class="navbar-header">
                         <!-- Logo Starts -->
-                        <a class="navbar-brand" href="/index.html"><img class="brand-logo" src="images/logo.png" alt="logo"></a>
+                        <a class="navbar-brand" href="index.html"><img class="brand-logo" src="images/logo.png" alt="logo"></a>
                         <!-- #Logo Ends -->
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="sr-only">Toggle navigation</span>
@@ -42,9 +42,8 @@
                     <!-- Nav Starts -->
                     <div class="navbar-collapse  collapse">
                         <ul class="nav navbar-nav navbar-right scroll">
-                            <li><a href="">Create Contest</a></li>
-                            <li><a href="">Enter Contest</a></li>
-                            <li><a href="">Browse Contests</a></li>
+                            <li><a href="create_contest.html">Create Contest</a></li>
+                            <li><a href="browse_contest.html">Browse Contests</a></li>
                             <li><a href="login.html">Login</a></li>
                         </ul>
                     </div>
@@ -61,29 +60,30 @@
                     <h3 class="gray">Create Your Contest</h3>
                     <form>
                         <div class="form-group">
-                            <label for="user-name">User Name</label>
-                            <input type="text" class="form-control" id="user-name" placeholder="Username">
+                            <label for="company-name">Company Name</label>
+                            <input type="name" class="form-control" id="company-name" placeholder="Company Name">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="user-email" placeholder="jeff@gmail.com">
+                            <label for="company-prize">Prizes</label>
+                            <input type="text" class="form-control" id="company-prize" placeholder="Prizes">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="user-pw" placeholder="Password">
+                            <label for="company-location">Location</label>
+                            <input type="text" class="form-control" id="company-location" placeholder="Location">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputFirstName1">First Name</label>
-                            <input type="text" class="form-control" id="user-first" placeholder="Jeff">
+                            <label for="company-expiration-date">Expiration Date (MM/DD/YYYY)</label>
+                            <input type="date" class="form-control" id="company-expiration-date" placeholder="Expiration Date">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputLastName1">Last Name</label>
-                            <input type="text" class="form-control" id="user-last" placeholder="Smith">
+                            <label for="company-contest-description">Description</label>
+                            <input type="text" class="form-control" id="company-contest-description" placeholder="Description">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputAge">Age</label>
-                            <input type="number" class="form-control" id="user-age" placeholder="25">
+                            <label for="company-website">Website</label>
+                            <input type="text" class="form-control" id="company-website" placeholder="http://example.com">
                         </div>
+                        <!--
                         <div class="form-group">
                             <label for="exampleInputZip">Zip Code</label>
                             <input type="number" class="form-control" id="user-zip" placeholder="77012">
