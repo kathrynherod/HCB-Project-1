@@ -4,14 +4,16 @@ var manageUsers = {
 
         firebase.initializeApp(config);
         var database = firebase.database();
+
         var email = "";
         var password = "";
         this.renderDom(database);
         this.userState(database);
         this.handleClicks(database);
         this.createContests(database);
+        this.renderDom();
     },
-    renderDom: function(database) {},
+
 
     createContests: function(database) {
         database.ref('/contests/' + 1).push({
@@ -25,7 +27,9 @@ var manageUsers = {
         });
     },
 
-    renderDom: function(database) {},
+    renderDom: function() {
+
+    },
 
     userPromise: function(email, password) {
 
@@ -69,25 +73,16 @@ var manageUsers = {
     },
 
     userState: function(database) {
-
         firebase.auth().onAuthStateChanged(firebaseUser => {
-
             if (firebaseUser) {
-
                 console.log("logged in ");
-
                 console.log(firebaseUser);
-
                 manageUsers.handleClicks(database, firebaseUser);
                 manageUsers.userProfile(database, firebaseUser);
-
-
             } else {
                 console.log("not logged in")
             }
-
         })
-
     },
 
     handleClicks: function(database, firebaseUser) {
@@ -136,6 +131,7 @@ var manageUsers = {
             $("#update-profile").hide();
 
         })
+        //upload profile pic
         $("#upload-profile-pic").on("change", function(e, database) {
             e.preventDefault();
             manageUsers.uploadProfilePic(e);
@@ -158,7 +154,7 @@ var manageUsers = {
 
     userProfile: function(database, user) {
         var currentUser = firebase.auth().currentUser;
-        console.log(currentUser);
+
 
         database.ref('/users/' + currentUser.uid).on('value', function(user) {
             var userInfo = user.toJSON();
@@ -170,6 +166,8 @@ var manageUsers = {
             $("#user-name").attr("placeholder", userInfo.UserName);
             $("#user-age").attr("placeholder", userInfo.Age);
             $("#user-zip").attr("placeholder", userInfo.ZipCode);
+
+            $("#profileimageContainer").attr("src",userInfo.ProfilePicUrl);
         });
     },
     uploadProfilePic: function(e) {
@@ -187,11 +185,9 @@ var manageUsers = {
         var metadata = {
             contentType: 'image/jpeg'
         };
-
         // Upload file and metadata to the object 'images/mountains.jpg'
         var uploadTask = storageRef.child('profilepics/' + file.name).put(file, metadata);
 
-        // Listen for state changes, errors, and completion of the upload.
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
             function(snapshot) {
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
@@ -207,20 +203,15 @@ var manageUsers = {
                 }
             },
             function(error) {
-
                 // A full list of error codes is available at
                 // https://firebase.google.com/docs/storage/web/handle-errors
                 switch (error.code) {
                     case 'storage/unauthorized':
                         // User doesn't have permission to access the object
                         break;
-
                     case 'storage/canceled':
                         // User canceled the upload
                         break;
-
-
-
                     case 'storage/unknown':
                         // Unknown error occurred, inspect error.serverResponse
                         break;
@@ -229,6 +220,11 @@ var manageUsers = {
             function() {
                 // Upload completed successfully, now we can get the download URL
                 var downloadURL = uploadTask.snapshot.downloadURL;
+                var currentUser = firebase.auth().currentUser;
+                firebase.database().ref('users/' + currentUser.uid).set({
+                    ProfilePicUrl: downloadURL
+                });
+                console.log(downloadURL)
             });
     }
 }
@@ -240,7 +236,6 @@ var config = {
     projectId: "groupproject1-4b4d1",
     storageBucket: "groupproject1-4b4d1.appspot.com",
     messagingSenderId: "345420353976"
-
 }
 
 manageUsers.init();
