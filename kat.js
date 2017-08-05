@@ -7,8 +7,21 @@ var manageUsers = {
         this.renderDom(database);
         this.userState(database);
         this.handleClicks(database);
+        this.createContests(database);
     },
     renderDom: function(database) {},
+    createContests: function(database) {
+        database.ref('/contests/' + 1).push({
+                id: 1,
+                CompanyName: "Coca Cola",
+                Location: "New York City, NY",
+                Prize: "$500",
+                Description: "Take a selfie enjoying a delicious coca-cola.",
+                ContestEnd: "August 5th, 2017 at 5pm EST",
+                Website: "http://www.coca-cola.com/global/"
+            });
+
+    },
     userPromise: function(email, password) {
         var promise = firebase.auth().signInWithEmailAndPassword(email, password);
         promise.catch(function(error) {
@@ -90,8 +103,8 @@ var manageUsers = {
             var lastName = $("#user-last").val().trim();
             var age = $("#user-age").val().trim();
             var zipCode = $("#user-zip").val().trim();
-
-            database.ref('/users/' + currentUser.uid).set({
+            var currentUser = firebase.auth().currentUser;
+            firebase.database().ref('/users/' + currentUser.uid).set({
                 uID: currentUser.uid,
                 UserName: userName,
                 Email: currentUser.email,
