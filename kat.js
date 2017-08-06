@@ -4,31 +4,10 @@ var manageUsers = {
 
         firebase.initializeApp(config);
         var database = firebase.database();
-
         var email = "";
         var password = "";
-        this.renderDom(database);
         this.userState(database);
         this.handleClicks(database);
-        this.createContests(database);
-        this.renderDom();
-    },
-
-
-    createContests: function(database) {
-        database.ref('/contests/' + 1).push({
-            id: 1,
-            CompanyName: "Coca Cola",
-            Location: "New York City, NY",
-            Prize: "$500",
-            Description: "Take a selfie enjoying a delicious coca-cola.",
-            ContestEnd: "August 5th, 2017 at 5pm EST",
-            Website: "http://www.coca-cola.com/global/"
-        });
-    },
-
-    renderDom: function() {
-
     },
 
     userPromise: function(email, password) {
@@ -40,7 +19,6 @@ var manageUsers = {
             var errorMessage = error.message;
             console.log(errorMessage);
         });
-
     },
 
     userRegister: function(database) {
@@ -126,7 +104,8 @@ var manageUsers = {
                 FirstName: firstName,
                 LastName: lastName,
                 Age: age,
-                ZipCode: zipCode
+                ZipCode: zipCode,
+                ProfilePicUrl: ""
             });
             $("#update-profile").hide();
 
@@ -136,38 +115,43 @@ var manageUsers = {
             e.preventDefault();
             manageUsers.uploadProfilePic(e);
         })
+        //upload contest pic
+        $("#upload-contest-photo-c1").on("change", function(e, database) {
+            e.preventDefault();
+            manageUsers.uploadContestPic(e);
+        })
     },
 
     writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
 
         var currentUser = firebase.auth().currentUser;
-        firebase.database().ref('users/' + currentUser.uid).set({
+        firebase.database().ref('/users/' + currentUser.uid).set({
             uID: currentUser.uid,
             UserName: userName,
             Email: email,
             FirstName: firstName,
             LastName: lastName,
             Age: age,
-            ZipCode: zipCode
+            ZipCode: zipCode,
+            ProfilePicUrl: ""
         });
     },
 
-    userProfile: function(database, user) {
+    userProfile: function(database, currentUser) {
         var currentUser = firebase.auth().currentUser;
-
 
         database.ref('/users/' + currentUser.uid).on('value', function(user) {
             var userInfo = user.toJSON();
             console.log(userInfo)
             $("#user-first-name").text(userInfo.FirstName);
-            $("#user-name").attr("placeholder", userInfo.UserName);
-            $("#user-first").attr("placeholder", userInfo.FirstName);
-            $("#user-last").attr("placeholder", userInfo.LastName);
-            $("#user-name").attr("placeholder", userInfo.UserName);
-            $("#user-age").attr("placeholder", userInfo.Age);
-            $("#user-zip").attr("placeholder", userInfo.ZipCode);
+            $("#user-name-input").attr("placeholder", userInfo.UserName);
+            $("#user-first-input").attr("placeholder", userInfo.FirstName);
+            $("#user-last-input").attr("placeholder", userInfo.LastName);
+            $("#user-name-input").attr("placeholder", userInfo.UserName);
+            $("#user-age-input").attr("placeholder", userInfo.Age);
+            $("#user-zip-input").attr("placeholder", userInfo.ZipCode);
 
-            $("#profileimageContainer").attr("src",userInfo.ProfilePicUrl);
+            $("#profileimageContainer").attr("src", userInfo.ProfilePicUrl);
         });
     },
     uploadProfilePic: function(e) {
@@ -221,8 +205,69 @@ var manageUsers = {
                 // Upload completed successfully, now we can get the download URL
                 var downloadURL = uploadTask.snapshot.downloadURL;
                 var currentUser = firebase.auth().currentUser;
-                firebase.database().ref('users/' + currentUser.uid).set({
+                firebase.database().ref('/users/' + currentUser.uid).update({
                     ProfilePicUrl: downloadURL
+                });
+                console.log(downloadURL)
+            });
+    },
+    uploadContestPic: function(e) {
+
+        // Get a reference to the storage service, which is used to create references in your storage bucket
+        var storage = firebase.storage();
+
+        // Create a storage reference from our storage service
+        var storageRef = storage.ref();
+
+        // File or Blob named mountains.jpg
+        var file = e.target.files[0];
+
+        // Create the file metadata
+        var metadata = {
+            contentType: 'image/jpeg'
+        };
+        // Upload file and metadata to the object 'images/mountains.jpg'
+        var uploadTask = storageRef.child('contestpics/1/' + file.name).put(file, metadata);
+
+        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+            function(snapshot) {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case firebase.storage.TaskState.PAUSED: // or 'paused'
+                        console.log('Upload is paused');
+                        break;
+                    case firebase.storage.TaskState.RUNNING: // or 'running'
+                        console.log('Upload is running');
+                        break;
+                    case firebase.storage.TaskState.SUCCESS: // or 'running'
+                        console.log('Upload successful');
+                        break;
+                }
+            },
+            function(error) {
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        break;
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        break;
+                }
+            },
+            function(complete) {
+                // Upload completed successfully, now we can get the download URL
+                var downloadURL = uploadTask.snapshot.downloadURL;
+                var currentUser = firebase.auth().currentUser;
+                firebase.database().ref('/contests/' + currentUser.uid).push({
+                    entry: downloadURL
+
                 });
                 console.log(downloadURL)
             });

@@ -82,6 +82,9 @@
                             <li class="list-group-item"><strong>Entries: </strong><span id="co-entries">1,295</span></li>
                             <li class="list-group-item"><strong>Location: </strong><span id="co-location">New York City, NY</span></li>
                             <li class="list-group-item"><strong>Website: </strong><a href="" id="co-website">Link</a></li>
+                            <li class="list-group-item"><strong>Enter Contest:</strong>
+                                <input type="file" id="upload-contest-photo-c1" data="contest-pic">
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -92,16 +95,16 @@
                         <!-- Default panel contents -->
                         <div class="panel-heading white">
                             <div class="row">
-                            <div class="col-md-3 col-sm-3 col-xs-3">
-                                <img class="img-responsive img-rounded usr-photo" src="https://s-media-cache-ak0.pinimg.com/736x/dd/45/96/dd4596b601062eb491ea9bb8e3a78062--two-faces-baby-faces.jpg" id="user-photo" />
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4" id="user-name">
-                                <strong>longhornkat</strong>
-                            </div>
-                            <div class="col-md-5 col-sm-5 col-xs-5" id="user-location">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                <strong>Austin, TX</strong>
-                            </div>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <img class="img-responsive img-rounded usr-photo" src="https://s-media-cache-ak0.pinimg.com/736x/dd/45/96/dd4596b601062eb491ea9bb8e3a78062--two-faces-baby-faces.jpg" id="user-photo" />
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-4" id="user-name">
+                                    <strong>longhornkat</strong>
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-5" id="user-location">
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    <strong>Austin, TX</strong>
+                                </div>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -130,16 +133,16 @@
                         <!-- Default panel contents -->
                         <div class="panel-heading white">
                             <div class="row">
-                            <div class="col-md-3 col-sm-3 col-xs-3">
-                                <img class="img-responsive img-rounded usr-photo" src="https://s-media-cache-ak0.pinimg.com/originals/23/44/f6/2344f67ddd31c4f13baf9ff33e1e40f6.jpg" id="user-photo" />
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4" id="user-name">
-                                <strong>thisJUSTn</strong>
-                            </div>
-                            <div class="col-md-5 col-sm-5 col-xs-5" id="user-location">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                <strong>Houston, TX</strong>
-                            </div>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <img class="img-responsive img-rounded usr-photo" src="https://s-media-cache-ak0.pinimg.com/originals/23/44/f6/2344f67ddd31c4f13baf9ff33e1e40f6.jpg" id="user-photo" />
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-4" id="user-name">
+                                    <strong>thisJUSTn</strong>
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-5" id="user-location">
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    <strong>Houston, TX</strong>
+                                </div>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -168,16 +171,16 @@
                         <!-- Default panel contents -->
                         <div class="panel-heading white">
                             <div class="row">
-                            <div class="col-md-3 col-sm-3 col-xs-3">
-                                <img class="img-responsive img-rounded usr-photo" src="http://st-listas.20minutos.es/images/2009-08/137609/1558180_640px.jpg?1252404008" id="user-photo" />
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-4" id="user-name">
-                                <strong>PHILosophical</strong>
-                            </div>
-                            <div class="col-md-5 col-sm-5 col-xs-5" id="user-location">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                <strong>Houston, TX</strong>
-                            </div>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <img class="img-responsive img-rounded usr-photo" src="http://st-listas.20minutos.es/images/2009-08/137609/1558180_640px.jpg?1252404008" id="user-photo" />
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-4" id="user-name">
+                                    <strong>PHILosophical</strong>
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-5" id="user-location">
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    <strong>Houston, TX</strong>
+                                </div>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -201,7 +204,6 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
         <!--Contact Ends-->
@@ -225,6 +227,8 @@
         </div>
         <!-- jquery -->
         <script src="../assets/jquery.js"></script>
+        <!-- intializing firebase-->
+        <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
         <!-- wow script -->
         <script src="../assets/wow/wow.min.js"></script>
         <!-- boostrap -->
@@ -237,6 +241,7 @@
         <script src="../assets/gallery/jquery.blueimp-gallery.min.js"></script>
         <!-- custom script -->
         <script src="../assets/script.js"></script>
+        <script src="../kat.js"></script>
 </body>
 
 </html>

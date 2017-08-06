@@ -152,20 +152,19 @@ var manageUsers = {
         });
     },
 
-    userProfile: function(database, user) {
+    userProfile: function(database, currentUser) {
         var currentUser = firebase.auth().currentUser;
 
-
-        database.ref('/users/' + currentUser.uid).on('value', function(user) {
+        database.ref('/users/' + currentUser.uid).on('value', function(currentUser) {
             var userInfo = user.toJSON();
-            console.log(userInfo)
+            console.log(userInfo);
             $("#user-first-name").text(userInfo.FirstName);
-            $("#user-name").attr("placeholder", userInfo.UserName);
-            $("#user-first").attr("placeholder", userInfo.FirstName);
-            $("#user-last").attr("placeholder", userInfo.LastName);
-            $("#user-name").attr("placeholder", userInfo.UserName);
-            $("#user-age").attr("placeholder", userInfo.Age);
-            $("#user-zip").attr("placeholder", userInfo.ZipCode);
+            $("#user-name-input").attr("placeholder", userInfo.UserName);
+            $("#user-first-input").attr("placeholder", userInfo.FirstName);
+            $("#user-last-input").attr("placeholder", userInfo.LastName);
+            $("#user-name-input").attr("placeholder", userInfo.UserName);
+            $("#user-age-input").attr("placeholder", userInfo.Age);
+            $("#user-zip-input").attr("placeholder", userInfo.ZipCode);
 
             $("#profileimageContainer").attr("src",userInfo.ProfilePicUrl);
         });
