@@ -1,37 +1,76 @@
     var manageUsers = {
+
         init: function() {
             firebase.initializeApp(config);
             var database = firebase.database();
-
             var email = "";
             var password = "";
             this.userState(database);
             this.handleClicks();
             this.displayContestPhotos();
+            this.createContests();
         },
         displayContestPhotos: function() {
             var contestID = $("#contest-photo-entries").data("id");
 
-            firebase.database().ref('/contests/' + contestID).orderByChild("entryNo").on('child_added' || "child_changed", function(data) {
+            firebase.database().ref('/contests/' + contestID).orderByChild("entryTimestamp").on('child_added' || "child_changed", function(data) {
 
                 if (data.val().entryNo % 2 === 0) {
                     //don't show even children in db bc they are duplicates
+                } else {
+                    var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><!-- Default panel contents --><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
+                    var beforeUserName = "'/></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
+                    var beforeUserLoc = "</strong></div><div class='col-md-5 col-sm-5 col-xs-5' id='user-location'><i class='fa fa-map-marker' aria-hidden='true'></i><strong>";
+                    var beforeUserPhoto = "</strong></div></div><div class='panel-body'><div class='row'><img class='img-responsive contest-photo' src='";
+                    var afterPhoto = "'/></div><div class='row'><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-thumbs-o-up' aria-hidden='true'></i></div><div class='col-md-4 col-sm-4 col-xs-4'><p id='likes'>451 likes</p></div><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-comments-o' aria-hidden='true'></i></div><div class='col-md-5  col-sm-5 col-xs-5'><p id='comments'>5 comments</p></div></div></div></div></div></li>";
+                    var contestUserImage = data.val().entryProfilePic;
+                    var contestUserName = data.val().entryUser;
+                    var contestUserLocation = data.val().entryLoc;
+                    var contestUserPhoto = data.val().entryURL;
+
+
+                    $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto);
                 }
-                else {
-                var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><!-- Default panel contents --><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
-                var beforeUserName = "'/></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
-                var beforeUserLoc = "</strong></div><div class='col-md-5 col-sm-5 col-xs-5' id='user-location'><i class='fa fa-map-marker' aria-hidden='true'></i><strong>";
-                var beforeUserPhoto = "</strong></div></div><div class='panel-body'><div class='row'><img class='img-responsive contest-photo' src='";
-                var afterPhoto = "'/></div><div class='row'><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-thumbs-o-up' aria-hidden='true'></i></div><div class='col-md-4 col-sm-4 col-xs-4'><p id='likes'>451 likes</p></div><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-comments-o' aria-hidden='true'></i></div><div class='col-md-5  col-sm-5 col-xs-5'><p id='comments'>5 comments</p></div></div></div></div></div></li>";
-                var contestUserImage = data.val().entryProfilePic;
-                var contestUserName = data.val().entryUser;
-                var contestUserLocation = data.val().entryLoc;
-                var contestUserPhoto = data.val().entryURL;
-
-
-                $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto);
-            }
             })
+        },
+        createContests: function() {
+
+            var contestID = 1;
+            var getEntries = "";
+            firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
+                getEntries = (snapshot.numChildren())/2;
+
+                firebase.database().ref('/contest-info/' + contestID + "/").set({
+                    companyName: "Coca Cola",
+                    companyLogoUrl: "http://diylogodesigns.com/blog/wp-content/uploads/2016/04/Coca-Cola-Logo-PNG.png",
+                    contestDesc: "Take a selfie enjoying a delicious coca-cola.",
+                    contestPrize: "$500",
+                    contestEndDate: "August 5th, 2017",
+                    contestEntries: getEntries,
+                    companyLocation: "Atlanta, Georgia",
+                    companyWebsiteUrl: "http://www.coca-colacompany.com/homepage"
+                });
+                console.log(getEntries)
+            });
+            contestID = 2;
+            getEntries = "";
+            firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
+                getEntries = (snapshot.numChildren())/2;
+
+                firebase.database().ref('/contest-info/' + contestID + "/").set({
+                    companyName: "Think Geek",
+                    companyLogoUrl: "https://upload.wikimedia.org/wikipedia/commons/0/01/ThinkGeek_logo_14-07-29.jpg",
+                    contestDesc: "Take a selfie enjoying wearing one of our tshirts.",
+                    contestPrize: "$100",
+                    contestEndDate: "August 10th, 2017",
+                    contestEntries: getEntries,
+                    companyLocation: "Fairfax, VA",
+                    companyWebsiteUrl: "http://www.thinkgeek.com/"
+                });
+                console.log(getEntries)
+            });
+
+
         },
         userPromise: function(email, password) {
 
@@ -284,14 +323,15 @@
                             //console.log('Upload is running');
                             break;
                         case firebase.storage.TaskState.SUCCESS: // or 'running'
-                                console.log('Upload successful');
-                                break;
+                            console.log('Upload successful');
+                            break;
                     }
                 },
                 function(error) {
                     // A full list of error codes is available at
                     // https://firebase.google.com/docs/storage/web/handle-errors
-                    switch (error.code) {                    case 'storage/unauthorized':
+                    switch (error.code) {
+                        case 'storage/unauthorized':
                             // User doesn't have permission to access the object
                             break;
                         case 'storage/canceled':
@@ -300,48 +340,51 @@
                         case 'storage/unknown':
                             // Unknown error occurred, inspect error.serverResponse
                             break;
-                    }//close switch
-                },//close error func
-            //close on
+                    } //close switch
+                }, //close error func
+                //close on
                 function() {
-                // Upload completed successfully, now we can get the download URL
-                downloadURL = uploadTask.snapshot.downloadURL;
-                var currentUser = firebase.auth().currentUser;
+                    // Upload completed successfully, now we can get the download URL
+                    var timestamp = Date();
+                    downloadURL = uploadTask.snapshot.downloadURL;
+                    var currentUser = firebase.auth().currentUser;
 
-                console.log(downloadURL);
+                    console.log(timestamp);
 
-                firebase.database().ref('/users/' + currentUser.uid).update({
-                    ContestEntries: userInfo.ContestEntries + 1
-                });
-                firebase.database().ref('/contests-entries-by-userid/' + currentUser.uid + "/" + parseInt(userInfo.ContestEntries + 1)).set({
-                    userID: userInfo.uID,
-                    contestNo: contestID,
-                    photoUrl: downloadURL,
-                    userEmail: userInfo.Email,
-                    userName: userInfo.UserName,
-                    userProfilePic: userInfo.ProfilePicUrl,
-                    userLocation: userInfo.ZipCode,
-                    userEntryNo: userInfo.ContestEntries + 1
-                });
-                var updateEntry = "";
-                firebase.database().ref('/contests/' + contestID).on("value", function(snapshot){
-                    updateEntry = snapshot.numChildren();
-                   
-                    console.log(parseInt(updateEntry))
-                })
-                console.log(updateEntry)
-                firebase.database().ref().child("contests-entries-by-userid").on("child_added", function(data) {
-                    firebase.database().ref('/contests/' + contestID).push({
-                        entryNo: updateEntry,
-                        entryURL: downloadURL,
-                        entryUser: userInfo.UserName,
-                        entryProfilePic: userInfo.ProfilePicUrl,
-                        entryLoc: userInfo.ZipCode
+                    firebase.database().ref('/users/' + currentUser.uid).update({
+                        ContestEntries: userInfo.ContestEntries + 1
+                    });
+                    firebase.database().ref('/contests-entries-by-userid/' + currentUser.uid + "/" + parseInt(userInfo.ContestEntries + 1)).set({
+                        userID: userInfo.uID,
+                        contestNo: contestID,
+                        photoUrl: downloadURL,
+                        userEmail: userInfo.Email,
+                        userName: userInfo.UserName,
+                        userProfilePic: userInfo.ProfilePicUrl,
+                        userLocation: userInfo.ZipCode,
+                        userEntryNo: userInfo.ContestEntries + 1
+                    });
+                    var updateEntry = "";
+                    firebase.database().ref('/contests/' + contestID).on("value", function(snapshot) {
+                        updateEntry = snapshot.numChildren();
+
+                        console.log(parseInt(updateEntry))
                     })
-                });
-            }); //close then function
-        }//close uploadContestPic
-    }//close object
+                    console.log(updateEntry)
+                    firebase.database().ref().child("contests-entries-by-userid").on("child_added", function(data) {
+                        firebase.database().ref('/contests/' + contestID).push({
+                            entryNo: updateEntry,
+                            entryURL: downloadURL,
+                            entryUser: userInfo.UserName,
+                            entryProfilePic: userInfo.ProfilePicUrl,
+                            entryLoc: userInfo.ZipCode,
+                            entryTimestamp: timestamp
+                        })
+                    });
+                }); //close then function
+        } //close uploadContestPic
+
+    } //close object
 
     var config = {
         apiKey: "AIzaSyDOjDpYcoEnBzdA5y3d6EPrRcmMzIq5aBc",
