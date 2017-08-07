@@ -15,14 +15,23 @@ var manageUsers = {
     },
     displayContestPhotos: function() {
         var contestID = $("#contest-photo-entries").data("id");
-        console.log(contestID)
-        firebase.database().ref('/contests/' + contestID).on("child_added", function(data){
 
-            $("#contest-photo-entries").append("<img src='https://media.giphy.com/media/3oEjHP8ELRNNlnlLGM/giphy.gif'/>")
+
+        firebase.database().ref('/contests/' + contestID).on('child_added', function(data) {
+            var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><!-- Default panel contents --><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
+            var beforeUserName = "'/></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
+            var beforeUserLoc = "</strong></div><div class='col-md-5 col-sm-5 col-xs-5' id='user-location'><i class='fa fa-map-marker' aria-hidden='true'></i><strong>";
+            var beforeUserPhoto = "</strong></div></div><div class='panel-body'><div class='row'><img class='img-responsive contest-photo' src='";
+            var afterPhoto = "'/></div><div class='row'><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-thumbs-o-up' aria-hidden='true'></i></div><div class='col-md-4 col-sm-4 col-xs-4'><p id='likes'>451 likes</p></div><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-comments-o' aria-hidden='true'></i></div><div class='col-md-5  col-sm-5 col-xs-5'><p id='comments'>5 comments</p></div></div></div></div></div></li>";
+
+            var contestUserImage = data.val().entryProfilePic;
+            var contestUserName = data.val().entryUser;
+            var contestUserLocation = data.val().entryLoc;
+            var contestUserPhoto = data.val().entryURL;
+
+
+            $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto);
         })
-
-
-        //var starCountRef = database.ref('contest-entries/' + postId + '/starCount');
 
     },
     userPromise: function(email, password) {
@@ -334,7 +343,10 @@ var manageUsers = {
                         });
                     });
                 })
+
+
             });
+
     }
 }
 
