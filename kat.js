@@ -38,7 +38,7 @@
             var contestID = 1;
             var getEntries = "";
             firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
-                getEntries = (snapshot.numChildren())/2;
+                getEntries = (snapshot.numChildren()) / 2;
 
                 firebase.database().ref('/contest-info/' + contestID + "/").set({
                     companyName: "Coca Cola",
@@ -55,7 +55,7 @@
             contestID = 2;
             getEntries = "";
             firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
-                getEntries = (snapshot.numChildren())/2;
+                getEntries = (snapshot.numChildren()) / 2;
 
                 firebase.database().ref('/contest-info/' + contestID + "/").set({
                     companyName: "Think Geek",
@@ -83,34 +83,7 @@
                 $("#login-error").text(errorMessage)
             });
         },
-        userRegister: function(database) {
-            email = $("#user-email").val().trim();
-            password = $("#user-pw").val().trim();
-            var userName = $("#user-name").val().trim();
-            var firstName = $("#user-first").val().trim();
-            var lastName = $("#user-last").val().trim();
-            var age = $("#user-age").val().trim();
-            var zipCode = $("#user-zip").val().trim();
-
-            //this is the authentication email and password check provided by firebase
-            //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .catch(function(error) {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    console.log(errorMessage);
-                });
-            var user = firebase.auth().currentUser;
-            console.log(user);
-            manageUsers.writeUserData(database, user, userName, email, firstName, lastName, age, zipCode);
-            firebase.auth().onAuthStateChanged(firebaseUser => {
-
-                if (firebaseUser) {
-                    window.location.href = "profile.html";
-                }
-
-            })
-        },
+        userRegister: function(database, password, userName, email, firstName, lastName, age, zipCode) {},
         userState: function(database, ) {
             firebase.auth().onAuthStateChanged(firebaseUser => {
                 if (firebaseUser) {
@@ -125,13 +98,37 @@
             })
         },
         handleClicks: function(database, firebaseUser) {
-            //register
 
+            //register user
             $("#register-btn").on("click", function(e) {
                 e.preventDefault();
-                manageUsers.userRegister();
+                email = $("#user-email").val().trim();
+                password = $("#user-pw").val().trim();
+                var userName = $("#user-name").val().trim();
+                var firstName = $("#user-first").val().trim();
+                var lastName = $("#user-last").val().trim();
+                var age = $("#user-age").val().trim();
+                var zipCode = $("#user-zip").val().trim();
+                //this is the authentication email and password check provided by firebase
+                //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .catch(function(error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        console.log(errorMessage);
+                    });
+                var user = firebase.auth().currentUser;
+                console.log(user);
+                manageUsers.userPromise(email, password);
+                manageUsers.writeUserData(database, user, userName, email, firstName, lastName, age, zipCode);
+                firebase.auth().onAuthStateChanged(firebaseUser => {
+                    if (firebaseUser) {
+                        window.location.href = "profile.html";
+                    }
+                })
                 $("#register-btn").hide();
             })
+
             //login
             $("#login-btn").on("click", function(e) {
                 e.preventDefault();
@@ -146,11 +143,13 @@
                     }
                 })
             })
+
             //logout
             $("#logout-btn").on("click", function() {
                 firebase.auth().signOut();
                 window.location.href = "index.html";
             })
+
             //update info
             $("#submit-changes-btn").on("click", function(e, database) {
                 e.preventDefault();
@@ -174,23 +173,22 @@
                 $("#update-profile").hide();
 
             })
+
             //upload profile pic
             $("#upload-profile-pic").on("change", function(e, database) {
                 e.preventDefault();
                 manageUsers.uploadProfilePic(e);
             })
+
             //upload contest pic
             $("#upload-contest-photo").on("change", function(e) {
                 e.preventDefault();
-
                 var contestID = $("#upload-contest-photo").data("id");
                 var currentUser = firebase.auth().currentUser;
-
                 firebase.database().ref('/users/' + currentUser.uid).on('value', function(user) {
                     userInfo = user.toJSON();
                 })
                 manageUsers.uploadContestPic(e, userInfo, contestID);
-
             })
         },
         writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
@@ -223,7 +221,13 @@
                 $("#user-age-input").attr("placeholder", userInfo.Age);
                 $("#user-zip-input").attr("placeholder", userInfo.ZipCode);
 
-                $("#profileimageContainer").attr("src", userInfo.ProfilePicUrl);
+                if (userInfo.ProfilePicUrl === "") {
+                    $("#profileimageContainer").attr("src", "images/placeholder.png");
+                    console.log(userInfo.ProfilePicUrl)
+                } else {
+                    $("#profileimageContainer").attr("src", userInfo.ProfilePicUrl);
+                    console.log(userInfo.ProfilePicUrl)
+                }
             });
         },
         uploadProfilePic: function(e) {
