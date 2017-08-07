@@ -5,6 +5,7 @@
             var database = firebase.database();
             var email = "";
             var password = "";
+            var contestCount = 1;
             this.userState(database);
             this.handleClicks();
             this.displayContestPhotos();
@@ -69,8 +70,6 @@
                 });
                 console.log(getEntries)
             });
-
-
         },
         userPromise: function(email, password) {
 
@@ -83,7 +82,6 @@
                 $("#login-error").text(errorMessage)
             });
         },
-        userRegister: function(database, password, userName, email, firstName, lastName, age, zipCode) {},
         userState: function(database, ) {
             firebase.auth().onAuthStateChanged(firebaseUser => {
                 if (firebaseUser) {
@@ -189,6 +187,33 @@
                     userInfo = user.toJSON();
                 })
                 manageUsers.uploadContestPic(e, userInfo, contestID);
+            })
+            //create contest
+            $("#create-contest-btn").on("click", function(e) {
+                e.preventDefault();
+                
+                var coName = $("#company-name").val().trim();
+                var coLogo = $("#company-logo").val().trim();
+                var coDesc = $("#company-contest-description").val().trim();
+                var coPrize = $("#company-prize").val().trim();
+                var coExp = $("#company-expiration-date").val().trim();
+                var coLoc = $("#company-location").val().trim();
+                var coURL = $("#company-website").val().trim();
+
+                var contestCount =2;
+
+                firebase.database().ref('/contest-info/' + contestCount + "/").set({
+                    companyName: coName,
+                    companyLogoUrl: coLogo,
+                    contestDesc: coDesc,
+                    contestPrize: coPrize,
+                    contestEndDate: coExp,
+                    contestEntries: 0,
+                    companyLocation: coLoc,
+                    companyWebsiteUrl: coURL 
+                });
+
+
             })
         },
         writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
