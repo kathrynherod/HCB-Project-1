@@ -12,6 +12,7 @@ var manageUsers = {
         this.displayContestPhotos(database);
     },
     displayContestPhotos: function(database) {
+       
 
         //var starCountRef = database.ref('contest-entries/' + postId + '/starCount');
 
@@ -133,6 +134,10 @@ var manageUsers = {
             firebase.database().ref('/users/' + currentUser.uid).on('value', function(user) {
                 userInfo = user.toJSON();
             })
+            console.log(firebase.database().ref('/contests/1/') )
+          
+                
+            
             manageUsers.uploadContestPic(e, userInfo, contestID);
 
         })
@@ -149,7 +154,7 @@ var manageUsers = {
             Age: age,
             ZipCode: zipCode,
             ProfilePicUrl: "",
-            ContestEntries: 0;
+            ContestEntries: 0
         });
     },
     userProfile: function(database, currentUser) {
@@ -291,6 +296,8 @@ var manageUsers = {
                 // Upload completed successfully, now we can get the download URL
                 var downloadURL = uploadTask.snapshot.downloadURL;
                 var currentUser = firebase.auth().currentUser;
+                var updateEntry = firebase.database().ref('/contests/' + contestID + "/");
+                console.log(updateEntry)
                 firebase.database().ref('/users/' + currentUser.uid).update({
                     ContestEntries: userInfo.ContestEntries + 1
                 });
@@ -305,15 +312,8 @@ var manageUsers = {
                     userEntryNo: userInfo.ContestEntries + 1
                 });
                 firebase.database().ref('/contests-entries-by-userid/' + currentUser.uid + "/").on("child_added", function(data) {
-                    firebase.database().ref('/contests-entries' + contestID).set({
-                        userID: userInfo.uID,
-                        contestNo: contestID,
-                        photoUrl: downloadURL,
-                        userEmail: userInfo.Email,
-                        userName: userInfo.UserName,
-                        userProfilePic: userInfo.ProfilePicUrl,
-                        userLocation: userInfo.ZipCode,
-                        userEntryNo: userInfo.ContestEntries + 1
+                    firebase.database().ref('/contests/' + contestID).set({
+                        entries: this + 1
                     });
                 });
                 console.log(downloadURL)

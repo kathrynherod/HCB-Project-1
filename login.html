@@ -22,6 +22,25 @@
 </head>
 
 <body>
+    <script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '330846097371920',
+            xfbml: true,
+            version: 'v2.10'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div class="topbar animated fadeInLeftBig"></div>
     <!-- Header Starts -->
     <div class="navbar-wrapper">
@@ -59,7 +78,7 @@
                 <div class="col-md-offset-3 col-md-6 custom-form">
                     <h3 class="gray">Existing Fans - Login</h3>
                     <h5 class="warning" id="login-error"></h5>
-                    <form >
+                    <form>
                         <div class="form-group">
                             <label for="login-email">Email address</label>
                             <input type="email" class="form-control" id="login-email" placeholder="john@smith.com">
@@ -73,7 +92,9 @@
                                 <button class="btn btn-default" id="login-btn">Login</button>
                             </div>
                             <div class="col-md-7  col-sm-7">
-                                <a href="register.html"><p class="register-p">Don't have an account? Click here to register</p></a>
+                                <a href="register.html">
+                                    <p class="register-p">Don't have an account? Click here to register</p>
+                                </a>
                             </div>
                         </div>
                     </form>
@@ -101,11 +122,9 @@
         <!-- The modal dialog, which will be used to wrap the lightbox content -->
     </div>
     <!-- jquery -->
-
     <script src="assets/jquery.js"></script>
     <!-- intializing firebase-->
     <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
-    
     <!-- wow script -->
     <script src="assets/wow/wow.min.js"></script>
     <!-- boostrap -->
@@ -118,7 +137,6 @@
     <script src="assets/gallery/jquery.blueimp-gallery.min.js"></script>
     <!-- custom script -->
     <script src="assets/script.js"></script>
-  
     <script src="justin.js"></script>
     <script src="kat.js"></script>
 </body>

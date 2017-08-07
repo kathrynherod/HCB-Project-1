@@ -22,6 +22,25 @@
 </head>
 
 <body>
+    <script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '330846097371920',
+            xfbml: true,
+            version: 'v2.10'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div class="topbar animated fadeInLeftBig"></div>
     <!-- Header Starts -->
     <div class="navbar-wrapper">
@@ -138,17 +157,16 @@
     <div id="works" class=" clearfix grid">
         <h1 class="text-center wowload fadeInUp grid-title">TRENDING CONTESTS</h1>
         <figure class="effect-oscar  wowload fadeInUp">
-            <img  src="images/portfolio/1.jpg" alt="img01" />
+            <img src="images/portfolio/1.jpg" alt="img01" />
             <div class="figure-image">
-            <figcaption>
-            
-                <h2>Adidas</h2>
-                <p class="center-this">Submit a photo wearing our gear</p>
-                <p class="center-this">Entries: 430</p>
-                <p class="center-this">Prize: $100</p>
+                <figcaption>
+                    <h2>Adidas</h2>
+                    <p class="center-this">Submit a photo wearing our gear</p>
+                    <p class="center-this">Entries: 430</p>
+                    <p class="center-this">Prize: $100</p>
                     <br>
                     <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
-            </figcaption>
+                </figcaption>
             </div>
         </figure>
         <figure class="effect-oscar  wowload fadeInUp">
@@ -158,8 +176,8 @@
                 <p class="center-this">Submit a photo wearing our gear</p>
                 <p class="center-this">Entries: 430</p>
                 <p class="center-this">Prize: $100</p>
-                    <br>
-                    <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
+                <br>
+                <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
             </figcaption>
         </figure>
         <figure class="effect-oscar  wowload fadeInUp">
@@ -169,8 +187,8 @@
                 <p class="center-this">Submit a photo wearing our gear</p>
                 <p class="center-this">Entries: 430</p>
                 <p class="center-this">Prize: $100</p>
-                    <br>
-                    <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
+                <br>
+                <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
             </figcaption>
         </figure>
         <figure class="effect-oscar  wowload fadeInUp">
@@ -180,54 +198,54 @@
                 <p class="center-this">Submit a photo wearing our gear</p>
                 <p class="center-this">Entries: 430</p>
                 <p class="center-this">Prize: $100</p>
-                    <br>
-                    <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
+                <br>
+                <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
             </figcaption>
         </figure>
         <figure class="effect-oscar  wowload fadeInUp">
-            <img  src="images/portfolio/5.jpg" alt="img01" />
+            <img src="images/portfolio/5.jpg" alt="img01" />
             <figcaption>
                 <h2>IBM</h2>
                 <p class="center-this">Submit a photo wearing our gear</p>
                 <p class="center-this">Entries: 430</p>
                 <p class="center-this">Prize: $100</p>
-                    <br>
-                    <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
+                <br>
+                <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
             </figcaption>
         </figure>
         <figure class="effect-oscar  wowload fadeInUp">
-            <img  src="images/portfolio/6.jpg" alt="img01" />
+            <img src="images/portfolio/6.jpg" alt="img01" />
             <figcaption>
                 <h2>Starbucks</h2>
                 <p class="center-this">Submit a photo wearing our gear</p>
                 <p class="center-this">Entries: 430</p>
                 <p class="center-this">Prize: $100</p>
-                    <br>
-                    <p class="center-this"><a href="contest_page.html" title="1" data-gallery>View more</a></p>
+                <br>
+                <p class="center-this"><a href="contest_page.html" title="1" data-gallery>View more</a></p>
             </figcaption>
         </figure>
         <figure class="effect-oscar  wowload fadeInUp">
-            <img  src="images/portfolio/7.jpg" alt="img01" />
+            <img src="images/portfolio/7.jpg" alt="img01" />
             <figcaption>
                 <h2>Restaurant</h2>
                 <p class="center-this">Submit a photo wearing our gear</p>
                 <p class="center-this">Entries: 430</p>
                 <p class="center-this">Prize: $100</p>
-                    <br>
-                    <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
+                <br>
+                <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
             </figcaption>
         </figure>
         <figure class="effect-oscar  wowload fadeInUp">
             <img src="images/portfolio/8.jpg" alt="img01" />
             <div class="figure-image">
-            <figcaption>
-                <h2>Farmer's Market</h2>
-                <p class="center-this">Submit a photo wearing our gear</p>
-                <p class="center-this">Entries: 430</p>
-                <p class="center-this">Prize: $100</p>
+                <figcaption>
+                    <h2>Farmer's Market</h2>
+                    <p class="center-this">Submit a photo wearing our gear</p>
+                    <p class="center-this">Entries: 430</p>
+                    <p class="center-this">Prize: $100</p>
                     <br>
                     <p class="center-this"><a href="#" title="1" data-gallery>View more</a></p>
-            </figcaption>
+                </figcaption>
             </div>
         </figure>
     </div>
@@ -267,21 +285,20 @@
                             </div>
                         </div>
                     </div>  hide for now -->
-
-                    <!-- Indicators -->
-                    <!-- HIDE for now
+    <!-- Indicators -->
+    <!-- HIDE for now
                     <ol class="carousel-indicators">
                         <li data-target="#carousel-testimonials" data-slide-to="0" class="active"></li>
                         <li data-target="#carousel-testimonials" data-slide-to="1"></li>
                         <li data-target="#carousel-testimonials" data-slide-to="2"></li>
                     </ol>
                     <!-- Indicators -->
-                    <!-- HIDE for now
+    <!-- HIDE for now
                 </div>
             </div>
         </div>
         <!-- team -->
-        <!-- HIDE for now
+    <!-- HIDE for now
         <h3 class="text-center  wowload fadeInUp">Our team</h3>
         <p class="text-center  wowload fadeInLeft">Our creative team that is making everything possible</p>
         <div class="row grid team  wowload fadeInUpBig">
