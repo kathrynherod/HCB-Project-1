@@ -9,7 +9,7 @@
             this.userState(database);
             this.handleClicks();
             this.displayContestPhotos();
-            this.createContests();
+            this.writeContests();
         },
         displayContestPhotos: function() {
             var contestID = $("#contest-photo-entries").data("id");
@@ -34,42 +34,27 @@
                 }
             })
         },
-        createContests: function() {
+        writeContests: function() {
+            var pathname = window.location.pathname;
+            console.log(pathname)
+            /*
+                        firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
+                            getEntries = (snapshot.numChildren()) / 2;
 
-            var contestID = 1;
-            var getEntries = "";
-            firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
-                getEntries = (snapshot.numChildren()) / 2;
+                            firebase.database().ref('/contest-info/' + contestID + "/").set({
+                                companyName: "Think Geek",
+                                companyLogoUrl: "https://upload.wikimedia.org/wikipedia/commons/0/01/ThinkGeek_logo_14-07-29.jpg",
+                                contestDesc: "Take a selfie enjoying wearing one of our tshirts.",
+                                contestPrize: "$100",
+                                contestEndDate: "August 10th, 2017",
+                                contestEntries: getEntries,
+                                companyLocation: "Fairfax, VA",
+                                companyWebsiteUrl: "http://www.thinkgeek.com/"
+                            });
+                            console.log(getEntries)
+                        });
 
-                firebase.database().ref('/contest-info/' + contestID + "/").set({
-                    companyName: "Coca Cola",
-                    companyLogoUrl: "http://diylogodesigns.com/blog/wp-content/uploads/2016/04/Coca-Cola-Logo-PNG.png",
-                    contestDesc: "Take a selfie enjoying a delicious coca-cola.",
-                    contestPrize: "$500",
-                    contestEndDate: "August 5th, 2017",
-                    contestEntries: getEntries,
-                    companyLocation: "Atlanta, Georgia",
-                    companyWebsiteUrl: "http://www.coca-colacompany.com/homepage"
-                });
-                console.log(getEntries)
-            });
-            contestID = 2;
-            getEntries = "";
-            firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
-                getEntries = (snapshot.numChildren()) / 2;
-
-                firebase.database().ref('/contest-info/' + contestID + "/").set({
-                    companyName: "Think Geek",
-                    companyLogoUrl: "https://upload.wikimedia.org/wikipedia/commons/0/01/ThinkGeek_logo_14-07-29.jpg",
-                    contestDesc: "Take a selfie enjoying wearing one of our tshirts.",
-                    contestPrize: "$100",
-                    contestEndDate: "August 10th, 2017",
-                    contestEntries: getEntries,
-                    companyLocation: "Fairfax, VA",
-                    companyWebsiteUrl: "http://www.thinkgeek.com/"
-                });
-                console.log(getEntries)
-            });
+                        */
         },
         userPromise: function(email, password) {
 
@@ -91,7 +76,10 @@
                     manageUsers.handleClicks(database, firebaseUser, );
                     manageUsers.userProfile(database, firebaseUser);
                 } else {
-                    console.log("not logged in")
+                    console.log("not logged in");
+                    $("#toggle-upload-cpic").html("<strong>Please login or register to enter this contest</strong>");
+                    $("#pic-upload-prog").hide();
+
                 }
             })
         },
@@ -191,7 +179,7 @@
             //create contest
             $("#create-contest-btn").on("click", function(e) {
                 e.preventDefault();
-                
+
                 var coName = $("#company-name").val().trim();
                 var coLogo = $("#company-logo").val().trim();
                 var coDesc = $("#company-contest-description").val().trim();
@@ -200,7 +188,7 @@
                 var coLoc = $("#company-location").val().trim();
                 var coURL = $("#company-website").val().trim();
 
-                var contestCount =2;
+                var contestCount = 2;
 
                 firebase.database().ref('/contest-info/' + contestCount + "/").set({
                     companyName: coName,
@@ -210,9 +198,8 @@
                     contestEndDate: coExp,
                     contestEntries: 0,
                     companyLocation: coLoc,
-                    companyWebsiteUrl: coURL 
+                    companyWebsiteUrl: coURL
                 });
-
 
             })
         },
