@@ -438,7 +438,10 @@ p {
     margin-top: 0px;
 }
 .submissions {
-	
+	width: 33%;
+    display: inline-flex;
+    background-color: transparent;
+    padding: 1vw;
 	
 
 }

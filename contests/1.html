@@ -83,14 +83,17 @@
                             <li class="list-group-item"><strong>Location: </strong><span id="co-location">New York City, NY</span></li>
                             <li class="list-group-item"><strong>Website: </strong><a href="" id="co-website">Link</a></li>
                             <li class="list-group-item"><strong>Enter Contest:</strong>
-                                <input type="file" id="upload-contest-photo-c1" data="contest-pic">
+                                <input type="file" id="upload-contest-photo" data-id="1"/>
                             </li>
+                            <li class="list-group-item"><strong>Photo upload progress: </strong><span id="photo-upload-progress">No photo uploaded</span></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4 col-sm-6 col-xs-12 submissions" id="submission1">
+             <div class="row">
+             <div class="col-md-12">
+            <ul class="list-group" id="contest-photo-entries">
+                <li class="list-group-item submissions" id="submission1">
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
                         <div class="panel-heading white">
@@ -127,8 +130,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12 submissions" id="submission2">
+                </li>
+                <li class="list-group-item submissions" id="submission2">
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
                         <div class="panel-heading white">
@@ -165,8 +168,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12 submissions" id="submission3">
+                </li>
+                <li class="list-group-item submissions" id="submission3">
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
                         <div class="panel-heading white">
@@ -203,7 +206,46 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </li>
+                <li class="list-group-item submissions" id="submission2">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading white">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <img class="img-responsive img-rounded usr-photo" src="https://s-media-cache-ak0.pinimg.com/originals/23/44/f6/2344f67ddd31c4f13baf9ff33e1e40f6.jpg" id="user-photo" />
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-4" id="user-name">
+                                    <strong>thisJUSTn</strong>
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-5" id="user-location">
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    <strong>Houston, TX</strong>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <img class="img-responsive contest-photo" src="https://favim.com/orig/201108/13/boy-coca-cola-coke-cola-drink-Favim.com-122377.jpg" />
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1 col-sm-1 col-xs-1">
+                                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <p id="likes">123 likes</p>
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 col-xs-1">
+                                        <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-md-5  col-sm-5 col-xs-5">
+                                        <p id="comments">9 comments</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul></div>
             </div>
         </div>
         <!--Contact Ends-->

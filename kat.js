@@ -4,12 +4,18 @@ var manageUsers = {
 
         firebase.initializeApp(config);
         var database = firebase.database();
+
         var email = "";
         var password = "";
         this.userState(database);
-        this.handleClicks(database);
+        this.handleClicks();
+        this.displayContestPhotos(database);
     },
+    displayContestPhotos: function(database) {
 
+        //var starCountRef = database.ref('contest-entries/' + postId + '/starCount');
+
+    },
     userPromise: function(email, password) {
 
         var promise = firebase.auth().signInWithEmailAndPassword(email, password);
@@ -18,9 +24,9 @@ var manageUsers = {
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorMessage);
+            $("#login-error").text(errorMessage)
         });
     },
-
     userRegister: function(database) {
         email = $("#user-email").val().trim();
         password = $("#user-pw").val().trim();
@@ -49,22 +55,22 @@ var manageUsers = {
 
         })
     },
-
-    userState: function(database) {
+    userState: function(database, ) {
         firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
                 console.log("logged in ");
+                console.log("Firebase Auth User ")
                 console.log(firebaseUser);
-                manageUsers.handleClicks(database, firebaseUser);
+                manageUsers.handleClicks(database, firebaseUser, );
                 manageUsers.userProfile(database, firebaseUser);
             } else {
                 console.log("not logged in")
             }
         })
     },
-
     handleClicks: function(database, firebaseUser) {
         //register
+
         $("#register-btn").on("click", function(e) {
             e.preventDefault();
             manageUsers.userRegister();
@@ -79,6 +85,8 @@ var manageUsers = {
             firebase.auth().onAuthStateChanged(firebaseUser => {
                 if (firebaseUser) {
                     window.location.href = "profile.html";
+                } else {
+
                 }
             })
         })
@@ -116,12 +124,19 @@ var manageUsers = {
             manageUsers.uploadProfilePic(e);
         })
         //upload contest pic
-        $("#upload-contest-photo-c1").on("change", function(e, database) {
+        $("#upload-contest-photo").on("change", function(e) {
             e.preventDefault();
-            manageUsers.uploadContestPic(e);
+
+            var contestID = $("#upload-contest-photo").data("id");
+            var currentUser = firebase.auth().currentUser;
+
+            firebase.database().ref('/users/' + currentUser.uid).on('value', function(user) {
+                userInfo = user.toJSON();
+            })
+            manageUsers.uploadContestPic(e, userInfo, contestID);
+
         })
     },
-
     writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
 
         var currentUser = firebase.auth().currentUser;
@@ -133,16 +148,17 @@ var manageUsers = {
             LastName: lastName,
             Age: age,
             ZipCode: zipCode,
-            ProfilePicUrl: ""
+            ProfilePicUrl: "",
+            ContestEntries: 0;
         });
     },
-
     userProfile: function(database, currentUser) {
         var currentUser = firebase.auth().currentUser;
 
         database.ref('/users/' + currentUser.uid).on('value', function(user) {
             var userInfo = user.toJSON();
-            console.log(userInfo)
+            console.log("Our Database Info ");
+            console.log(userInfo);
             $("#user-first-name").text(userInfo.FirstName);
             $("#user-name-input").attr("placeholder", userInfo.UserName);
             $("#user-first-input").attr("placeholder", userInfo.FirstName);
@@ -211,7 +227,8 @@ var manageUsers = {
                 console.log(downloadURL)
             });
     },
-    uploadContestPic: function(e) {
+    uploadContestPic: function(e, userInfo, contestID) {
+
 
         // Get a reference to the storage service, which is used to create references in your storage bucket
         var storage = firebase.storage();
@@ -223,17 +240,26 @@ var manageUsers = {
         var file = e.target.files[0];
 
         // Create the file metadata
+        var currentUser = firebase.auth().currentUser;
         var metadata = {
-            contentType: 'image/jpeg'
+            contentType: 'image/jpeg',
+            customMetadata: {
+                'location': userInfo.ZipCode,
+                'uid': currentUser.uid,
+                'user-name': userInfo.UserName,
+                'contest': contestID,
+                'user-profile-pic': userInfo.ProfilePicUrl
+            }
         };
         // Upload file and metadata to the object 'images/mountains.jpg'
-        var uploadTask = storageRef.child('contestpics/1/' + file.name).put(file, metadata);
+        var uploadTask = storageRef.child('contestpics/' + contestID + '/' + file.name).put(file, metadata);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
             function(snapshot) {
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
+                var uploadStatus = 'Upload is ' + progress + '% done';
+                $("#photo-upload-progress").text(uploadStatus);
                 switch (snapshot.state) {
                     case firebase.storage.TaskState.PAUSED: // or 'paused'
                         console.log('Upload is paused');
@@ -265,9 +291,30 @@ var manageUsers = {
                 // Upload completed successfully, now we can get the download URL
                 var downloadURL = uploadTask.snapshot.downloadURL;
                 var currentUser = firebase.auth().currentUser;
-                firebase.database().ref('/contests/' + currentUser.uid).push({
-                    entry: downloadURL
-
+                firebase.database().ref('/users/' + currentUser.uid).update({
+                    ContestEntries: userInfo.ContestEntries + 1
+                });
+                firebase.database().ref('/contests-entries-by-userid/' + currentUser.uid + "/" + parseInt(userInfo.ContestEntries + 1)).set({
+                    userID: userInfo.uID,
+                    contestNo: contestID,
+                    photoUrl: downloadURL,
+                    userEmail: userInfo.Email,
+                    userName: userInfo.UserName,
+                    userProfilePic: userInfo.ProfilePicUrl,
+                    userLocation: userInfo.ZipCode,
+                    userEntryNo: userInfo.ContestEntries + 1
+                });
+                firebase.database().ref('/contests-entries-by-userid/' + currentUser.uid + "/").on("child_added", function(data) {
+                    firebase.database().ref('/contests-entries' + contestID).set({
+                        userID: userInfo.uID,
+                        contestNo: contestID,
+                        photoUrl: downloadURL,
+                        userEmail: userInfo.Email,
+                        userName: userInfo.UserName,
+                        userProfilePic: userInfo.ProfilePicUrl,
+                        userLocation: userInfo.ZipCode,
+                        userEntryNo: userInfo.ContestEntries + 1
+                    });
                 });
                 console.log(downloadURL)
             });
