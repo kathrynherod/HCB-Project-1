@@ -185,6 +185,7 @@ p {
 
 
 
+
 /*about*/
 
 #about {
@@ -230,6 +231,7 @@ p {
 
 
 
+
 /*testimonials*/
 
 #partners {
@@ -268,6 +270,7 @@ p {
 
 
 
+
 /*works*/
 
 #works {
@@ -291,6 +294,7 @@ p {
     text-decoration: none;
     padding: 0 3em;
 }
+
 
 
 
@@ -338,7 +342,9 @@ p {
 }
 
 
+
 }
+
 
 
 
@@ -354,6 +360,7 @@ p {
     border-radius: 0;
     outline: none;
 }
+
 
 
 
@@ -428,38 +435,53 @@ p {
     text-align: right;
 }
 .blue {
-	background-color: #1992D3!important;
+    background-color: #1992D3!important;
 }
 .white {
-	background-color: white!important;
+    background-color: white!important;
 }
 #company-name {
-	color:#1992D3;
+    color: #1992D3;
     margin-top: 0px;
 }
 .submissions {
-	width: 33%;
+    width: 25%;
     display: inline-flex;
     background-color: transparent;
     padding: 1vw;
-	
-
+    border: none;
 }
-.contest-photo {
-	width: 100%;
-	height: auto;
+@media (min-width: 768px) {
+    .submissions {
+        width: 33%;
+    }
+}
+@media (max-width: 767px) {
+    .submissions {
+        width: 50%;
+    }
+}
+@media (max-width: 667px) {
+    .submissions {
+        width: 100%;
+    }
+}
 
+
+.contest-photo {
+    width: 100%;
+    height: auto;
 }
 .usr-info-row {
-	padding: 5px;
+    padding: 5px;
 }
 
 #user-location {
-	text-align: right;
-	padding-top: 15px;
+    text-align: right;
+    padding-top: 15px;
 }
 .usr-photo {
-	max-height: 7vh;
+    max-height: 7vh;
 }
 @-webkit-keyframes typing {
     from {
@@ -474,7 +496,7 @@ p {
 .type-text-animate {
     border-right: .1em solid #1992D3;
     width: 100%;
-   
+
     margin: 0px;
     white-space: nowrap;
     overflow: hidden;
@@ -482,23 +504,25 @@ p {
     blink-caret .5s step-end infinite alternate;
 }
 #company-image {
-	width: 100%;
-	height: auto;
+    width: 100%;
+    height: auto;
 }
 #contest-info {
-	font-weight: 500;
-	padding: 5px 5px 5px 0;
-	margin-bottom: 0px;
+    font-weight: 500;
+    padding: 5px 5px 5px 0;
+    margin-bottom: 0px;
 }
 #contest-description {
-	margin-bottom: 0px;
-	font-weight: 300;
+    margin-bottom: 0px;
+    font-weight: 300;
 }
-#comments, #likes {
-	margin-bottom:0;
+#comments,
+#likes {
+    margin-bottom: 0;
 }
-.fa-comments-o, .fa-thumbs-o-up {
-	padding-top: 4px;
+.fa-comments-o,
+.fa-thumbs-o-up {
+    padding-top: 4px;
 }
 
 
