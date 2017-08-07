@@ -9,10 +9,18 @@ var manageUsers = {
         var password = "";
         this.userState(database);
         this.handleClicks();
-        this.displayContestPhotos(database);
+        this.displayContestPhotos();
+
+
     },
-    displayContestPhotos: function(database) {
-       
+    displayContestPhotos: function() {
+        var contestID = $("#contest-photo-entries").data("id");
+        console.log(contestID)
+        firebase.database().ref('/contests/' + contestID).on("child_added", function(data){
+
+            $("#contest-photo-entries").append("<img src='https://media.giphy.com/media/3oEjHP8ELRNNlnlLGM/giphy.gif'/>")
+        })
+
 
         //var starCountRef = database.ref('contest-entries/' + postId + '/starCount');
 
@@ -134,10 +142,6 @@ var manageUsers = {
             firebase.database().ref('/users/' + currentUser.uid).on('value', function(user) {
                 userInfo = user.toJSON();
             })
-            console.log(firebase.database().ref('/contests/1/') )
-          
-                
-            
             manageUsers.uploadContestPic(e, userInfo, contestID);
 
         })
@@ -230,10 +234,10 @@ var manageUsers = {
                     ProfilePicUrl: downloadURL
                 });
                 console.log(downloadURL)
-            });
+            }
+        );
     },
     uploadContestPic: function(e, userInfo, contestID) {
-
 
         // Get a reference to the storage service, which is used to create references in your storage bucket
         var storage = firebase.storage();
@@ -243,7 +247,7 @@ var manageUsers = {
 
         // File or Blob named mountains.jpg
         var file = e.target.files[0];
-
+        var downloadURL = "";
         // Create the file metadata
         var currentUser = firebase.auth().currentUser;
         var metadata = {
@@ -256,6 +260,7 @@ var manageUsers = {
                 'user-profile-pic': userInfo.ProfilePicUrl
             }
         };
+
         // Upload file and metadata to the object 'images/mountains.jpg'
         var uploadTask = storageRef.child('contestpics/' + contestID + '/' + file.name).put(file, metadata);
 
@@ -294,10 +299,10 @@ var manageUsers = {
             },
             function(complete) {
                 // Upload completed successfully, now we can get the download URL
-                var downloadURL = uploadTask.snapshot.downloadURL;
+                downloadURL = uploadTask.snapshot.downloadURL;
                 var currentUser = firebase.auth().currentUser;
-                var updateEntry = firebase.database().ref('/contests/' + contestID + "/");
-                console.log(updateEntry)
+
+
                 firebase.database().ref('/users/' + currentUser.uid).update({
                     ContestEntries: userInfo.ContestEntries + 1
                 });
@@ -311,12 +316,24 @@ var manageUsers = {
                     userLocation: userInfo.ZipCode,
                     userEntryNo: userInfo.ContestEntries + 1
                 });
-                firebase.database().ref('/contests-entries-by-userid/' + currentUser.uid + "/").on("child_added", function(data) {
-                    firebase.database().ref('/contests/' + contestID).set({
-                        entries: this + 1
+
+                var updateEntry = "";
+                firebase.database().ref().child("contests").child("1").child("entries").once("value", function(data) {
+                    updateEntry = parseInt(data.val());
+                    console.log(updateEntry)
+                    firebase.database().ref().child("contests-entries-by-userid").once("child_changed", function(data) {
+                        firebase.database().ref('/contests/' + contestID).push({
+                            entryNo: updateEntry + 1,
+                            entryURL: downloadURL,
+                            entryUser: userInfo.UserName,
+                            entryProfilePic: userInfo.ProfilePicUrl,
+                            entryLoc: userInfo.ZipCode
+                        })
+                        firebase.database().ref('/contests/' + contestID).update({
+                            entries: updateEntry + 1
+                        });
                     });
-                });
-                console.log(downloadURL)
+                })
             });
     }
 }
