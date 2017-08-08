@@ -36,25 +36,33 @@
         },
         writeContests: function() {
             var pathname = window.location.pathname;
-            console.log(pathname)
-            /*
-                        firebase.database().ref('/contests/' + contestID).once("value").then(function(snapshot) {
-                            getEntries = (snapshot.numChildren()) / 2;
 
-                            firebase.database().ref('/contest-info/' + contestID + "/").set({
-                                companyName: "Think Geek",
-                                companyLogoUrl: "https://upload.wikimedia.org/wikipedia/commons/0/01/ThinkGeek_logo_14-07-29.jpg",
-                                contestDesc: "Take a selfie enjoying wearing one of our tshirts.",
-                                contestPrize: "$100",
-                                contestEndDate: "August 10th, 2017",
-                                contestEntries: getEntries,
-                                companyLocation: "Fairfax, VA",
-                                companyWebsiteUrl: "http://www.thinkgeek.com/"
-                            });
-                            console.log(getEntries)
-                        });
+            var pathSplit = pathname.split("/");
+            var pathLength = pathSplit.length - 1;
+            var pathEnd = pathSplit[pathLength];
+            var currentContest = pathEnd[0];
 
-                        */
+            firebase.database().ref('/contest-info/' + currentContest + "/").on("value", function(data) {
+
+                $('#company-name-' + currentContest).text(data.val().companyName);
+                $('#company-image-' + currentContest).text(data.val().companyLogoUrl);
+                $('#contest-description-' + currentContest).text(data.val().contestDesc);
+                $('#co-prize-' + currentContest).text(data.val().contestPrize);
+                $('#co-end-date-' + currentContest).text(data.val().contestEndDate);
+                $('#co-entries-' + currentContest).text(data.val().contestEntries);
+                $('#co-location-' + currentContest).text(data.val().companyLocation);
+                $('#co-website-' + currentContest).text(data.val().companyWebsiteUrl);
+
+            })
+                firebase.database().ref('/contests/' + currentContest + "/").on("value", function(snapshot) {
+                    var getEntries = parseInt(snapshot.numChildren()) / 2;
+                    firebase.database().ref('/contest-info/' + currentContest + "/").update({
+                        contestEntries: getEntries,
+                    });
+                    console.log(getEntries)
+                });
+         
+
         },
         userPromise: function(email, password) {
 
@@ -145,7 +153,7 @@
                 var age = $("#user-age-input").val().trim();
                 var zipCode = $("#user-zip-input").val().trim();
                 var currentUser = firebase.auth().currentUser;
-                firebase.database().ref('/users/' + currentUser.uid).set({
+                firebase.database().ref('/users/' + currentUser.uid).update({
 
                     uID: currentUser.uid,
                     UserName: userName,
@@ -155,6 +163,7 @@
                     Age: age,
                     ZipCode: zipCode,
                     ProfilePicUrl: ""
+
                 });
                 $("#update-profile").hide();
 
@@ -205,9 +214,6 @@
                         companyWebsiteUrl: coURL
                     });
                 })
-
-
-
             })
         },
         writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
