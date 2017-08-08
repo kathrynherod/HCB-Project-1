@@ -294,7 +294,9 @@ p {
     text-decoration: none;
     padding: 0 3em;
 }
-
+.co-photo-logo {
+    max-height: 35vh;
+}
 
 
 

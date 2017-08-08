@@ -15,7 +15,7 @@
         displayContestPhotos: function() {
             var contestID = $("#contest-photo-entries").data("id");
 
-            firebase.database().ref('/contests/' + contestID).orderByChild("entryTimestamp").on('child_added' || "child_changed", function(data) {
+            firebase.database().ref('contests/' + contestID).orderByChild("entryTimestamp").on('child_added' || "child_changed", function(data) {
                 if (data.val().entryNo % 2 === 0) {
                     //don't show even children in db bc they are duplicates
                 } else {
@@ -33,11 +33,11 @@
             })
         },
         writeBrowseContests: function() {
-            firebase.database().ref('/contest-info/').on("value", function(snapshot) {
+            firebase.database().ref('contest-info/').on("value", function(snapshot) {
                 var getNumContests = snapshot.numChildren();
                 for (i = getNumContests; i > 0; i--) {
 
-                    firebase.database().ref('/contest-info/' + i + "/").on("value", function(data) {
+                    firebase.database().ref('contest-info/' + i + "/").once("value", function(data) {
                         var startFig = "<figure class='effect-oscar  wowload fadeInUp' id='figure-'" + i + ">";
                         var figLog = "<img src='" + data.val().companyLogoUrl + "' alt='company-logo' /><figcaption>";
                         var conName = "<h2 id='company-name-'" + i + ">" + data.val().companyName + "</h2>";
@@ -45,38 +45,40 @@
                         var conEnt = "<br><p class='center-this' id='company-entries-'" + i + ">Entries: " + data.val().contestEntries + "</p>";
                         var conPrize = "<p class='center-this' id='company-prize-'" + i + ">Prize: " + data.val().contestPrize + "</p>";
                         var conLink = "<br><p class='center-this'><a href='contests/" + i + ".html' id='" + i + "'>View contest page</a></p></figcaption></figure>"
-
+                       
                         $("#trending-contests").after(startFig + figLog + conDesc + conEnt + conPrize + conLink);
                     })
-
-
-
                 }
             })
         },
         writeContests: function() {
             var pathname = window.location.pathname;
+
             var pathSplit = pathname.split("/");
             var pathLength = pathSplit.length - 1;
             var pathEnd = pathSplit[pathLength];
             var currentContest = pathEnd[0];
-
-            firebase.database().ref('/contest-info/' + currentContest + "/").on("value", function(data) {
-                $('#company-name-' + currentContest).text(data.val().companyName);
-                $('#company-image-' + currentContest).attr("src", data.val().companyLogoUrl);
-                $('#contest-description-' + currentContest).text(data.val().contestDesc);
-                $('#co-prize-' + currentContest).text(data.val().contestPrize);
-                $('#co-end-date-' + currentContest).text(data.val().contestEndDate);
-                $('#co-entries-' + currentContest).text(data.val().contestEntries);
-                $('#co-location-' + currentContest).text(data.val().companyLocation);
-                $('#co-website-' + currentContest).attr("href", data.val().companyWebsiteUrl);
-            })
-            firebase.database().ref('/contests/' + currentContest + "/").on("value", function(snapshot) {
-                var getEntries = parseInt(snapshot.numChildren()) / 2;
-                firebase.database().ref('/contest-info/' + currentContest + "/").update({
-                    contestEntries: getEntries,
+           
+            if (pathEnd === "index.html" || pathEnd === "login.html" || pathEnd === "register.html" || pathEnd === "profile.html" || pathEnd === "browse_contest.html" || pathEnd === "create_contest.html"){
+                console.log("")
+            } else {
+                firebase.database().ref('contest-info/' + currentContest + "/").on("value", function(data) {
+                    $('#company-name-' + currentContest).text(data.val().companyName);
+                    $('#company-image-' + currentContest).attr("src", data.val().companyLogoUrl).addClass("co-photo-logo center-block");
+                    $('#contest-description-' + currentContest).text(data.val().contestDesc);
+                    $('#co-prize-' + currentContest).text(data.val().contestPrize);
+                    $('#co-end-date-' + currentContest).text(data.val().contestEndDate);
+                    $('#co-entries-' + currentContest).text(data.val().contestEntries);
+                    $('#co-location-' + currentContest).text(data.val().companyLocation);
+                    $('#co-website-' + currentContest).attr("href", data.val().companyWebsiteUrl);
+                })
+                firebase.database().ref('contests/' + currentContest + "/").on("value", function(snapshot) {
+                    var getEntries = parseInt(snapshot.numChildren()) / 2;
+                    firebase.database().ref('contest-info/' + currentContest + "/").update({
+                        contestEntries: getEntries,
+                    });
                 });
-            });
+            }
         },
         userPromise: function(email, password) {
 
@@ -211,12 +213,12 @@
                 var coURL = $("#company-website").val().trim();
 
                 var contestCount = "";
-                firebase.database().ref('/contest-info/').once("value", function(snapshot) {
+                firebase.database().ref('contest-info/').once("value", function(snapshot) {
                     contestCount = snapshot.numChildren();
                     contestCount = parseInt(contestCount);
                     console.log(contestCount)
 
-                    firebase.database().ref('/contest-info/' + contestCount + "/").set({
+                    firebase.database().ref('contest-info/' + contestCount + "/").set({
                         companyName: coName,
                         companyLogoUrl: coLogo,
                         contestDesc: coDesc,
@@ -264,7 +266,7 @@
                     console.log(userInfo.ProfilePicUrl)
                 } else {
                     $("#profileimageContainer").attr("src", userInfo.ProfilePicUrl);
-                    console.log(userInfo.ProfilePicUrl)
+
                 }
             });
         },
@@ -349,7 +351,7 @@
                 }
             };
             // Upload file and metadata to the object 'images/mountains.jpg'
-            var uploadTask = storageRef.child('contestpics/' + contestID + '/' + file.name).put(file, metadata);
+            var uploadTask = storageRef.child('/contestpics/' + contestID + '/' + file.name).put(file, metadata);
 
             uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
                 function(snapshot) {
@@ -396,7 +398,7 @@
                     firebase.database().ref('/users/' + currentUser.uid).update({
                         ContestEntries: userInfo.ContestEntries + 1
                     });
-                    firebase.database().ref('/contests-entries-by-userid/' + currentUser.uid + "/" + parseInt(userInfo.ContestEntries + 1)).set({
+                    firebase.database().ref('contests-entries-by-userid/' + currentUser.uid + "/" + parseInt(userInfo.ContestEntries + 1)).set({
                         userID: userInfo.uID,
                         contestNo: contestID,
                         photoUrl: downloadURL,
@@ -407,13 +409,13 @@
                         userEntryNo: userInfo.ContestEntries + 1
                     });
                     var updateEntry = "";
-                    firebase.database().ref('/contests/' + contestID).once("value", function(snapshot) {
+                    firebase.database().ref('contests/' + contestID).once("value", function(snapshot) {
                         updateEntry = snapshot.numChildren();
                         console.log(parseInt(updateEntry))
                     })
 
                     firebase.database().ref().child("contests-entries-by-userid").once("child_added", function(data) {
-                        firebase.database().ref('/contests/' + contestID).push({
+                        firebase.database().ref('contests/' + contestID).push({
                             entryNo: updateEntry,
                             entryURL: downloadURL,
                             entryUser: userInfo.UserName,
