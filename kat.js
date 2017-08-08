@@ -240,9 +240,8 @@
             })
 
             //like button
-            $(".center-this .col-md-6 .col-sm-6 .col-xs-6 .like-button").on("click", function(e){
-                var grabBtnId = e.id;
-                console.log(grabBtnId);
+            $(".like-button").on("click", function(e){
+                
                 console.log("clicked")
             })
         },
