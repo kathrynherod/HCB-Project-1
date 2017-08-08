@@ -15,7 +15,6 @@
             var contestID = $("#contest-photo-entries").data("id");
 
             firebase.database().ref('/contests/' + contestID).orderByChild("entryTimestamp").on('child_added' || "child_changed", function(data) {
-
                 if (data.val().entryNo % 2 === 0) {
                     //don't show even children in db bc they are duplicates
                 } else {
@@ -28,22 +27,18 @@
                     var contestUserName = data.val().entryUser;
                     var contestUserLocation = data.val().entryLoc;
                     var contestUserPhoto = data.val().entryURL;
-
-
                     $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto);
                 }
             })
         },
         writeContests: function() {
             var pathname = window.location.pathname;
-
             var pathSplit = pathname.split("/");
             var pathLength = pathSplit.length - 1;
             var pathEnd = pathSplit[pathLength];
             var currentContest = pathEnd[0];
 
             firebase.database().ref('/contest-info/' + currentContest + "/").on("value", function(data) {
-
                 $('#company-name-' + currentContest).text(data.val().companyName);
                 $('#company-image-' + currentContest).attr("src" , data.val().companyLogoUrl);
                 $('#contest-description-' + currentContest).text(data.val().contestDesc);
@@ -51,18 +46,14 @@
                 $('#co-end-date-' + currentContest).text(data.val().contestEndDate);
                 $('#co-entries-' + currentContest).text(data.val().contestEntries);
                 $('#co-location-' + currentContest).text(data.val().companyLocation);
-                $('#co-website-' + currentContest).attr("src",data.val().companyWebsiteUrl);
-
+                $('#co-website-' + currentContest).attr("href",data.val().companyWebsiteUrl);
             })
                 firebase.database().ref('/contests/' + currentContest + "/").on("value", function(snapshot) {
                     var getEntries = parseInt(snapshot.numChildren()) / 2;
                     firebase.database().ref('/contest-info/' + currentContest + "/").update({
                         contestEntries: getEntries,
                     });
-                    console.log(getEntries)
                 });
-         
-
         },
         userPromise: function(email, password) {
 
@@ -87,7 +78,6 @@
                     console.log("not logged in");
                     $("#toggle-upload-cpic").html("<strong>Please login or register to enter this contest</strong>");
                     $("#pic-upload-prog").hide();
-
                 }
             })
         },
@@ -394,13 +384,12 @@
                         userEntryNo: userInfo.ContestEntries + 1
                     });
                     var updateEntry = "";
-                    firebase.database().ref('/contests/' + contestID).on("value", function(snapshot) {
+                    firebase.database().ref('/contests/' + contestID).once("value", function(snapshot) {
                         updateEntry = snapshot.numChildren();
-
                         console.log(parseInt(updateEntry))
                     })
-                    console.log(updateEntry)
-                    firebase.database().ref().child("contests-entries-by-userid").on("child_added", function(data) {
+                 
+                    firebase.database().ref().child("contests-entries-by-userid").once("child_added", function(data) {
                         firebase.database().ref('/contests/' + contestID).push({
                             entryNo: updateEntry,
                             entryURL: downloadURL,
