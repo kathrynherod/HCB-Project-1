@@ -188,18 +188,25 @@
                 var coLoc = $("#company-location").val().trim();
                 var coURL = $("#company-website").val().trim();
 
-                var contestCount = 2;
+                var contestCount = "";
+                firebase.database().ref('/contest-info/').once("value", function(snapshot) {
+                    contestCount = snapshot.numChildren();
+                    contestCount = parseInt(contestCount);
+                    console.log(contestCount)
 
-                firebase.database().ref('/contest-info/' + contestCount + "/").set({
-                    companyName: coName,
-                    companyLogoUrl: coLogo,
-                    contestDesc: coDesc,
-                    contestPrize: coPrize,
-                    contestEndDate: coExp,
-                    contestEntries: 0,
-                    companyLocation: coLoc,
-                    companyWebsiteUrl: coURL
-                });
+                    firebase.database().ref('/contest-info/' + contestCount + "/").set({
+                        companyName: coName,
+                        companyLogoUrl: coLogo,
+                        contestDesc: coDesc,
+                        contestPrize: coPrize,
+                        contestEndDate: coExp,
+                        contestEntries: 0,
+                        companyLocation: coLoc,
+                        companyWebsiteUrl: coURL
+                    });
+                })
+
+
 
             })
         },
