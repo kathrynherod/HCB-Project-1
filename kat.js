@@ -42,11 +42,11 @@
                         var figLog = "<img src='" + data.val().companyLogoUrl + "' alt='company-logo' /><figcaption>";
                         var conName = "<h2 id='company-name-'" + i + ">" + data.val().companyName + "</h2>";
                         var conDesc = "<p class='center-this' id='company-desc-'" + i + ">" + data.val().contestDesc + "</p>";
-                        var conEnt = "<p class='center-this' id='company-entries-'" + i + ">" + data.val().contestEntries + "</p>";
-                        var conPrize = "<p class='center-this' id='company-prize-'" + i + ">" + data.val().contestPrize + "</p>";
-                        var conLink = "<br><p class='center-this'><a href='" + i + ".html' id='" + i + "'>View more</a></p></figcaption></figure>"
+                        var conEnt = "<br><p class='center-this' id='company-entries-'" + i + ">Entries: " + data.val().contestEntries + "</p>";
+                        var conPrize = "<p class='center-this' id='company-prize-'" + i + ">Prize: " + data.val().contestPrize + "</p>";
+                        var conLink = "<br><p class='center-this'><a href='contests/" + i + ".html' id='" + i + "'>View contest page</a></p></figcaption></figure>"
 
-                        $("#trending-contests").after(startFig + figLog + conName + conDesc + conEnt + conPrize + conLink);
+                        $("#trending-contests").after(startFig + figLog + conDesc + conEnt + conPrize + conLink);
                     })
 
 
