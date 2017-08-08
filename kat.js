@@ -45,13 +45,13 @@
             firebase.database().ref('/contest-info/' + currentContest + "/").on("value", function(data) {
 
                 $('#company-name-' + currentContest).text(data.val().companyName);
-                $('#company-image-' + currentContest).text(data.val().companyLogoUrl);
+                $('#company-image-' + currentContest).attr("src" , data.val().companyLogoUrl);
                 $('#contest-description-' + currentContest).text(data.val().contestDesc);
                 $('#co-prize-' + currentContest).text(data.val().contestPrize);
                 $('#co-end-date-' + currentContest).text(data.val().contestEndDate);
                 $('#co-entries-' + currentContest).text(data.val().contestEntries);
                 $('#co-location-' + currentContest).text(data.val().companyLocation);
-                $('#co-website-' + currentContest).text(data.val().companyWebsiteUrl);
+                $('#co-website-' + currentContest).attr("src",data.val().companyWebsiteUrl);
 
             })
                 firebase.database().ref('/contests/' + currentContest + "/").on("value", function(snapshot) {
