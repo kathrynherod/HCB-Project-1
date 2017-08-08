@@ -19,8 +19,9 @@
 .grid figure img {
 	position: relative;
 	display: block;
-	max-width: 101%;
+	width: 101%;
 	opacity: 1;
+	max-height: 250px;
 }
 
 .grid figure figcaption {
