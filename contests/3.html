@@ -22,10 +22,11 @@
 </head>
 
 <body>
-    <script>
+        <script>
     window.fbAsyncInit = function() {
         FB.init({
             appId: '330846097371920',
+            autoLogAppEvents : true,
             xfbml: true,
             version: 'v2.10'
         });
@@ -38,6 +39,17 @@
         js = d.createElement(s);
         js.id = id;
         js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div id="fb-root"></div>
+    <script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=330846097371920";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
@@ -107,6 +119,11 @@
 <!-- CHANGE THIS ID --> <!-- CHANGE THIS ID --> <!-- CHANGE THIS ID -->
                             <p id="contest-description-3"></p>
 <!-- CHANGE THIS ID --> <!-- CHANGE THIS ID --> <!-- CHANGE THIS ID -->
+                            <!-- FB INTEGRATION --><!-- FB INTEGRATION -->
+                            <!-- FB INTEGRATION --><!-- FB INTEGRATION -->
+                            <div class="fb-like" data-href="https://kathrynherod.github.io/HCB-Project-1/contests/3.html" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+                            <!-- FB INTEGRATION --><!-- FB INTEGRATION -->
+                            <!-- FB INTEGRATION --><!-- FB INTEGRATION -->
 
                         </div>
                         <!-- List group -->

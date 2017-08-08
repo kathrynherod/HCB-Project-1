@@ -63,7 +63,7 @@ h4 i {
 p {
     font-size: 1em;
     line-height: 1.7em;
-    margin-bottom: 1.7em;
+    margin-bottom: 1.5em;
     text-align: justify;
 }
 
@@ -186,6 +186,7 @@ p {
 
 
 
+
 /*about*/
 
 #about {
@@ -232,6 +233,7 @@ p {
 
 
 
+
 /*testimonials*/
 
 #partners {
@@ -271,6 +273,7 @@ p {
 
 
 
+
 /*works*/
 
 #works {
@@ -294,9 +297,50 @@ p {
     text-decoration: none;
     padding: 0 3em;
 }
+
 .co-photo-logo {
     max-height: 35vh;
 }
+
+.panel-default {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.panel-heading,
+.panel-body {
+    padding-bottom: 5px;
+}
+
+#social-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#contest-photo-entries {
+    border: 1px solid #ddd;
+}
+#entry-likes {
+    padding-top: 7px;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+.like-button {
+    background: #1992D3;
+    padding: 10px 0 10px 0;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+}
+
+.like-button:hover {
+     color: #1992D3;
+    background: white;
+    border:1px solid #1992D3;
+    box-shadow: 0;
+    cursor: pointer;
+
+}
+
 
 
 
@@ -345,7 +389,9 @@ p {
 
 
 
+
 }
+
 
 
 
@@ -362,6 +408,7 @@ p {
     border-radius: 0;
     outline: none;
 }
+
 
 
 
@@ -477,10 +524,14 @@ p {
 .usr-info-row {
     padding: 5px;
 }
-
+#user-name {
+    padding: 10px 0 0 0;
+    text-align: center;
+}
 #user-location {
     text-align: right;
-    padding-top: 15px;
+    padding-top: 10px;
+    padding-left: 0px;
 }
 .usr-photo {
     max-height: 7vh;

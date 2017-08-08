@@ -19,16 +19,20 @@
                 if (data.val().entryNo % 2 === 0) {
                     //don't show even children in db bc they are duplicates
                 } else {
-                    var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><!-- Default panel contents --><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
-                    var beforeUserName = "'/></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
+                    var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
+                    var beforeUserName = "'></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
                     var beforeUserLoc = "</strong></div><div class='col-md-5 col-sm-5 col-xs-5' id='user-location'><i class='fa fa-map-marker' aria-hidden='true'></i><strong>";
                     var beforeUserPhoto = "</strong></div></div><div class='panel-body'><div class='row'><img class='img-responsive contest-photo' src='";
-                    var afterPhoto = "'/></div><div class='row'><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-thumbs-o-up' aria-hidden='true'></i></div><div class='col-md-4 col-sm-4 col-xs-4'><p id='likes'>451 likes</p></div><div class='col-md-1 col-sm-1 col-xs-1'><i class='fa fa-comments-o' aria-hidden='true'></i></div><div class='col-md-5  col-sm-5 col-xs-5'><p id='comments'>5 comments</p></div></div></div></div></div></li>";
+                    var afterPhoto = "'></div><div class='row'><div class='col-md-12 col-sm-12 col-xs-12'><div class='row' id='social-row'><div class='center-this col-md-6 col-sm-6 col-xs-6 like-button' id='like-button-id-";
+                    var afterLikeBtn = "'><i class='fa fa-thumbs-o-up' aria-hidden='true' id='entry-likes-btn'></i>Like This</div><div class='col-md-6 col-sm-6 col-xs-6'><p class='center-this' id='entry-likes'>";
+                    var closeIt = "</p></div></div></div></div></div></div></div></li>";
                     var contestUserImage = data.val().entryProfilePic;
                     var contestUserName = data.val().entryUser;
                     var contestUserLocation = data.val().entryLoc;
                     var contestUserPhoto = data.val().entryURL;
-                    $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto);
+                    var contestLikeButton = contestID + "-" + data.val().entryNo;
+                    var contestLikes = data.val().entryLikes + " Likes";
+                    $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto + contestLikeButton + afterLikeBtn + contestLikes + closeIt);
                 }
             })
         },
@@ -45,7 +49,7 @@
                         var conEnt = "<br><p class='center-this' id='company-entries-'" + i + ">Entries: " + data.val().contestEntries + "</p>";
                         var conPrize = "<p class='center-this' id='company-prize-'" + i + ">Prize: " + data.val().contestPrize + "</p>";
                         var conLink = "<br><p class='center-this'><a href='contests/" + i + ".html' id='" + i + "'>View contest page</a></p></figcaption></figure>"
-                       
+
                         $("#trending-contests").after(startFig + figLog + conDesc + conEnt + conPrize + conLink);
                     })
                 }
@@ -58,8 +62,8 @@
             var pathLength = pathSplit.length - 1;
             var pathEnd = pathSplit[pathLength];
             var currentContest = pathEnd[0];
-           
-            if (pathEnd === "index.html" || pathEnd === "login.html" || pathEnd === "register.html" || pathEnd === "profile.html" || pathEnd === "browse_contest.html" || pathEnd === "create_contest.html"){
+
+            if (pathEnd === "index.html" || pathEnd === "login.html" || pathEnd === "register.html" || pathEnd === "profile.html" || pathEnd === "browse_contest.html" || pathEnd === "create_contest.html") {
                 console.log("")
             } else {
                 firebase.database().ref('contest-info/' + currentContest + "/").on("value", function(data) {
@@ -99,7 +103,7 @@
                     console.log(firebaseUser);
                     manageUsers.handleClicks(database, firebaseUser, );
                     manageUsers.userProfile(database, firebaseUser);
-                   
+
                 } else {
                     console.log("not logged in");
                     $("#toggle-upload-cpic").html("<strong>Please login or register to enter this contest</strong>");
@@ -217,9 +221,10 @@
                 firebase.database().ref('contest-info/').once("value", function(snapshot) {
                     contestCount = snapshot.numChildren();
                     contestCount = parseInt(contestCount);
-                    console.log(contestCount)
+                    console.log("current contest count " + contestCount)
+                    var updatedCount = contestCount + 1;
 
-                    firebase.database().ref('contest-info/' + contestCount + "/").set({
+                    firebase.database().ref('contest-info/' + updatedCount + "/").set({
                         companyName: coName,
                         companyLogoUrl: coLogo,
                         contestDesc: coDesc,
@@ -229,7 +234,16 @@
                         companyLocation: coLoc,
                         companyWebsiteUrl: coURL
                     });
+                    window.location.href = "contests/" + updatedCount + ".html";
+
                 })
+            })
+
+            //like button
+            $(".center-this .col-md-6 .col-sm-6 .col-xs-6 .like-button").on("click", function(e){
+                var grabBtnId = e.id;
+                console.log(grabBtnId);
+                console.log("clicked")
             })
         },
         writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
@@ -407,7 +421,9 @@
                         userName: userInfo.UserName,
                         userProfilePic: userInfo.ProfilePicUrl,
                         userLocation: userInfo.ZipCode,
-                        userEntryNo: userInfo.ContestEntries + 1
+                        userEntryNo: userInfo.ContestEntries + 1,
+                        userEntryLikes: 0,
+                        userEntryComments: 0
                     });
                     var updateEntry = "";
                     firebase.database().ref('contests/' + contestID).once("value", function(snapshot) {
@@ -422,7 +438,9 @@
                             entryUser: userInfo.UserName,
                             entryProfilePic: userInfo.ProfilePicUrl,
                             entryLoc: userInfo.ZipCode,
-                            entryTimestamp: timestamp
+                            entryTimestamp: timestamp,
+                            entryLikes: 0,
+                            entryComments: 0
                         })
                     });
                 }); //close then function
