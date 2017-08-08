@@ -99,6 +99,7 @@
                     console.log(firebaseUser);
                     manageUsers.handleClicks(database, firebaseUser, );
                     manageUsers.userProfile(database, firebaseUser);
+                   
                 } else {
                     console.log("not logged in");
                     $("#toggle-upload-cpic").html("<strong>Please login or register to enter this contest</strong>");
