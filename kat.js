@@ -51,7 +51,7 @@ var manageUsers = {
         if (pathEnd === "browse_contest.html" || pathEnd === "index.html") {
             firebase.database().ref('contest-info/').once("child_added", function(snapshot) {
                 var getNumContests = snapshot.numChildren();
-                getNumContests = getNumContests/2;
+                
                 for (i = getNumContests; i > 0; i--) {
                     console.log(i)
                     firebase.database().ref('contest-info/' + i + "/").once("value", function(data) {
