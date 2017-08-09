@@ -11,6 +11,7 @@ var manageUsers = {
         this.displayContestPhotos();
         this.writeContests();
         this.writeBrowseContests();
+        this.facebookAPI();
 
     },
     displayContestPhotos: function() {
@@ -91,7 +92,7 @@ var manageUsers = {
     },
     facebookAPI: function() {
 
-        
+        $("body").append("<script>window.fbAsyncInit=function(){FB.init({appId:'330846097371920',autoLogAppEvents:!0,xfbml:!0,version:'v2.10'}),FB.AppEvents.logPageView()},function(e,n,t){var o,s=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='https://connect.facebook.net/en_US/sdk.js',s.parentNode.insertBefore(o,s))}(document,'script','facebook-jssdk');</script><div id='fb-root'></div><script>!function(e,n,t){var o,c=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=330846097371920',c.parentNode.insertBefore(o,c))}(document,'script','facebook-jssdk');</script>")
 
         
     },
