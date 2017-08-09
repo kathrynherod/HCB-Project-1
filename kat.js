@@ -12,8 +12,6 @@ var manageUsers = {
         this.writeContests();
         this.writeBrowseContests();
         this.facebookAPI();
-
-
     },
     displayContestPhotos: function() {
         var contestID = $("#contest-photo-entries").data("id");
@@ -104,7 +102,7 @@ var manageUsers = {
 
         $("body").append("<script>window.fbAsyncInit=function(){FB.init({appId:'330846097371920',autoLogAppEvents:!0,xfbml:!0,version:'v2.10'}),FB.AppEvents.logPageView()},function(e,n,t){var o,s=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='https://connect.facebook.net/en_US/sdk.js',s.parentNode.insertBefore(o,s))}(document,'script','facebook-jssdk');</script><div id='fb-root'></div><script>!function(e,n,t){var o,c=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=330846097371920',c.parentNode.insertBefore(o,c))}(document,'script','facebook-jssdk');</script>")
     },
-    displayUserEntries: function (uid) {
+    displayUserEntries: function(uid) {
 
 
         firebase.database().ref('contests-entries-by-userid/' + uid).on("child_added" || "child_changed", function(data) {
@@ -118,7 +116,7 @@ var manageUsers = {
                 var beforeUserLoc = "</strong></div><div class='col-md-5 col-sm-5 col-xs-5' id='user-location'><i class='fa fa-map-marker' aria-hidden='true'></i><strong>";
                 var beforeUserPhoto = "</strong></div></div><div class='panel-body'><div class='row'><img class='img-responsive contest-photo' src='";
                 var afterPhoto = "'></div></div></div></div></li>";
-                
+
                 var contestUserImage = data.val().userProfilePic;
                 var contestUserName = data.val().userName;
                 var contestUserLocation = data.val().userLocation;
@@ -169,34 +167,8 @@ var manageUsers = {
         //register user
         $("#register-btn").on("click", function(e) {
             e.preventDefault();
-            email = $("#user-email").val().trim();
-            password = $("#user-pw").val().trim();
-            var userName = $("#user-name").val().trim();
-            var firstName = $("#user-first").val().trim();
-            var lastName = $("#user-last").val().trim();
-            var age = $("#user-age").val().trim();
-            var zipCode = $("#user-zip").val().trim();
-            //this is the authentication email and password check provided by firebase
-            //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .catch(function(error) {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    console.log(errorMessage);
-                });
-            
-            manageUsers.userPromise(email, password);
-            var user = firebase.auth().currentUser;
-            console.log(user);
-            manageUsers.writeUserData(database, user, userName, email, firstName, lastName, age, zipCode);
-            firebase.auth().onAuthStateChanged(firebaseUser => {
-                if (firebaseUser) {
-                    window.location.href = "profile.html";
-                }
-            })
-            $("#register-btn").hide();
-        });
-
+            managerUsers.registerUser();
+        })
         //login
         $("#login-btn").on("click", function(e) {
             e.preventDefault();
@@ -294,21 +266,46 @@ var manageUsers = {
             })
         });
     },
-    writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
+    registerUser: function() {
+        email = $("#user-email").val().trim();
+        password = $("#user-pw").val().trim();
+        var userName = $("#user-name").val().trim();
+        var firstName = $("#user-first").val().trim();
+        var lastName = $("#user-last").val().trim();
+        var age = $("#user-age").val().trim();
+        var zipCode = $("#user-zip").val().trim();
+        //this is the authentication email and password check provided by firebase
+        //under Sign Up New Users: https://firebase.google.com/docs/auth/web/start
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorMessage);
+            });
 
-        var currentUser = firebase.auth().currentUser;
-        firebase.database().ref('/users/' + currentUser.uid).set({
-            uID: currentUser.uid,
-            UserName: userName,
-            Email: email,
-            FirstName: firstName,
-            LastName: lastName,
-            Age: age,
-            ZipCode: zipCode,
-            ProfilePicUrl: "",
-            ContestEntries: 0
-        });
+        manageUsers.userPromise(email, password);
+
+        firebase.auth().onAuthStateChanged(firebaseUser => {
+            if (firebaseUser) {
+                var currentUser = firebase.auth().currentUser;
+                firebase.database().ref('/users/' + currentUser.uid).set({
+                    uID: currentUser.uid,
+                    UserName: userName,
+                    Email: email,
+                    FirstName: firstName,
+                    LastName: lastName,
+                    Age: age,
+                    ZipCode: zipCode,
+                    ProfilePicUrl: "",
+                    ContestEntries: 0
+                });
+                window.location.href = "profile.html";
+            } else {}
+        })
+        $("#register-btn").hide();
+
     },
+
     userProfile: function(database, currentUser) {
         var currentUser = firebase.auth().currentUser;
 
