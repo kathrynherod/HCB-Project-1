@@ -471,7 +471,7 @@ var manageUsers = {
 } //close object
 
 var config = {
-    apiKey: "AIzaSyDOjDpYcoEnBzdA5y3d6EPrRcmMzIq5aBc",
+    apiKey: "AIzaSyDJJ5pLdp4yBK2xAildqSFsKNWY5FsVaJo",
     authDomain: "groupproject1-4b4d1.firebaseapp.com",
     databaseURL: "https://groupproject1-4b4d1.firebaseio.com",
     projectId: "groupproject1-4b4d1",
