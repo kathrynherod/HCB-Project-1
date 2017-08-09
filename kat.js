@@ -16,10 +16,10 @@
         displayContestPhotos: function() {
             var contestID = $("#contest-photo-entries").data("id");
 
-            firebase.database().ref('contests/' + contestID).orderByChild("entryTimestamp").on("child_added" || "child_changed", function(data) {
+            firebase.database().ref('contests/' + contestID).orderByChild("entryLikes").on("child_added" || "child_changed", function(data) {
                 if (data.val().entryNo % 2 === 0) {
                     //don't show even children in db bc they are duplicates
-                } else {
+                } else if (data.val().entryNo === 0 || data.val().entryNo % 2 !== 0) {
                     var conIdPlusEntId = contestID + "-" + data.val().entryNo;
                     var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
                     var beforeUserName = "'></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
@@ -34,7 +34,7 @@
                     var contestUserPhoto = data.val().entryURL;
                     var contestLikeButton = data.val().entryNo;
                     var contestLikes = data.val().entryLikes + " Likes";
-                    
+
                     $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto + contestLikeButton + afterLikeBtn + contestLikes + closeIt);
                 }
             })
@@ -73,6 +73,7 @@
                     $('#company-name-' + currentContest).text(data.val().companyName);
                     $('#company-image-' + currentContest).attr("src", data.val().companyLogoUrl).addClass("co-photo-logo center-block");
                     $('#contest-description-' + currentContest).text(data.val().contestDesc);
+                    $('#fb-like').attr("href", "https://kathrynherod.github.io/HCB-Project-1/contests/"+currentContest+".html");
                     $('#co-prize-' + currentContest).text(data.val().contestPrize);
                     $('#co-end-date-' + currentContest).text(data.val().contestEndDate);
                     $('#co-entries-' + currentContest).text(data.val().contestEntries);
@@ -86,6 +87,40 @@
                     });
                 });
             }
+        },
+        facebookAPI: function() {
+
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId: '330846097371920',
+                    autoLogAppEvents: true,
+                    xfbml: true,
+                    version: 'v2.10'
+                });
+                FB.AppEvents.logPageView();
+            };
+
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) { return; }
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+
+
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=330846097371920";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+
         },
         userPromise: function(email, password) {
 
@@ -241,10 +276,7 @@
 
                 })
             });
-
-
         },
-
         writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
 
             var currentUser = firebase.auth().currentUser;
