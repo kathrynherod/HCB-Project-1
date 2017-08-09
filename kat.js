@@ -104,10 +104,10 @@ var manageUsers = {
 
         $("body").append("<script>window.fbAsyncInit=function(){FB.init({appId:'330846097371920',autoLogAppEvents:!0,xfbml:!0,version:'v2.10'}),FB.AppEvents.logPageView()},function(e,n,t){var o,s=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='https://connect.facebook.net/en_US/sdk.js',s.parentNode.insertBefore(o,s))}(document,'script','facebook-jssdk');</script><div id='fb-root'></div><script>!function(e,n,t){var o,c=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=330846097371920',c.parentNode.insertBefore(o,c))}(document,'script','facebook-jssdk');</script>")
     },
-    displayUserEntries: function () {
+    displayUserEntries: function (uid) {
 
 
-        firebase.database().ref('contests/' + contestID).orderByChild("entryLikes").on("child_added" || "child_changed", function(data) {
+        firebase.database().ref('contests-entries-by-userid/' + uid).on("child_added" || "child_changed", function(data) {
             if (data.val().entryNo % 2 === 0) {
                 //don't show even children in db bc they are duplicates
             } else {
@@ -148,6 +148,8 @@ var manageUsers = {
                 console.log("logged in ");
                 console.log("Firebase Auth User ")
                 console.log(firebaseUser.uid);
+                var myUser = firebaseUser.uid;
+                manageUsers.displayUserEntries(myUser);
                 manageUsers.handleClicks(database, firebaseUser, );
                 manageUsers.userProfile(database, firebaseUser);
                 $("#act-login-toggle-contest").attr("href", "../profile.html").text("My Account");
