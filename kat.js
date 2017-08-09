@@ -12,7 +12,7 @@ var manageUsers = {
         this.writeContests();
         this.writeBrowseContests();
         this.facebookAPI();
-        this.googleMaps();
+
 
     },
     displayContestPhotos: function() {
@@ -43,23 +43,32 @@ var manageUsers = {
         })
     },
     writeBrowseContests: function() {
-        firebase.database().ref('contest-info/').on("value", function(snapshot) {
-            var getNumContests = snapshot.numChildren();
-            for (i = getNumContests; i > 0; i--) {
+        var pathname = window.location.pathname;
 
-                firebase.database().ref('contest-info/' + i + "/").once("value", function(data) {
-                    var startFig = "<figure class='effect-oscar  wowload fadeInUp' id='figure-'" + i + ">";
-                    var figLog = "<img src='" + data.val().companyLogoUrl + "' alt='company-logo' /><figcaption>";
-                    var conName = "<h2 id='company-name-'" + i + ">" + data.val().companyName + "</h2>";
-                    var conDesc = "<p class='center-this' id='company-desc-'" + i + ">" + data.val().contestDesc + "</p>";
-                    var conEnt = "<br><p class='center-this' id='company-entries-'" + i + ">Entries: " + data.val().contestEntries + "</p>";
-                    var conPrize = "<p class='center-this' id='company-prize-'" + i + ">Prize: " + data.val().contestPrize + "</p>";
-                    var conLink = "<br><p class='center-this'><a href='contests/" + i + ".html' id='" + i + "'>View contest page</a></p></figcaption></figure>"
+        var pathSplit = pathname.split("/");
+        var pathLength = pathSplit.length - 1;
+        var pathEnd = pathSplit[pathLength];
+        console.log(pathEnd)
 
-                    $("#trending-contests").after(startFig + figLog + conDesc + conEnt + conPrize + conLink);
-                })
-            }
-        })
+        if (pathEnd === "browse_contest.html" || pathEnd === "index.html") {
+            firebase.database().ref('contest-info/').on("value", function(snapshot) {
+                var getNumContests = snapshot.numChildren();
+                for (i = getNumContests; i > 0; i--) {
+
+                    firebase.database().ref('contest-info/' + i + "/").once("value", function(data) {
+                        var startFig = "<figure class='effect-oscar  wowload fadeInUp' id='figure-'" + i + ">";
+                        var figLog = "<img src='" + data.val().companyLogoUrl + "' alt='company-logo' /><figcaption>";
+                        var conName = "<h2 id='company-name-'" + i + ">" + data.val().companyName + "</h2>";
+                        var conDesc = "<p class='center-this' id='company-desc-'" + i + ">" + data.val().contestDesc + "</p>";
+                        var conEnt = "<br><p class='center-this' id='company-entries-'" + i + ">Entries: " + data.val().contestEntries + "</p>";
+                        var conPrize = "<p class='center-this' id='company-prize-'" + i + ">Prize: " + data.val().contestPrize + "</p>";
+                        var conLink = "<br><p class='center-this'><a href='contests/" + i + ".html' id='" + i + "'>View contest page</a></p></figcaption></figure>"
+
+                        $("#trending-contests").after(startFig + figLog + conDesc + conEnt + conPrize + conLink);
+                    })
+                }
+            })
+        } else {}
     },
     writeContests: function() {
         var pathname = window.location.pathname;
@@ -95,11 +104,9 @@ var manageUsers = {
 
         $("body").append("<script>window.fbAsyncInit=function(){FB.init({appId:'330846097371920',autoLogAppEvents:!0,xfbml:!0,version:'v2.10'}),FB.AppEvents.logPageView()},function(e,n,t){var o,s=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='https://connect.facebook.net/en_US/sdk.js',s.parentNode.insertBefore(o,s))}(document,'script','facebook-jssdk');</script><div id='fb-root'></div><script>!function(e,n,t){var o,c=e.getElementsByTagName(n)[0];e.getElementById(t)||((o=e.createElement(n)).id=t,o.src='//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=330846097371920',c.parentNode.insertBefore(o,c))}(document,'script','facebook-jssdk');</script>")
 
-        
+
     },
-    googleMaps: function() {
-        $("#google-map").append('<img src="">')
-    },
+
     userPromise: function(email, password) {
 
         var promise = firebase.auth().signInWithEmailAndPassword(email, password);
