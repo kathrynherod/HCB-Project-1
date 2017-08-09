@@ -19,7 +19,8 @@ var manageUsers = {
         firebase.database().ref('contests/' + contestID).orderByChild("entryLikes").on("child_added" || "child_changed", function(data) {
             if (data.val().entryNo % 2 === 0) {
                 //don't show even children in db bc they are duplicates
-            } else if (data.val().entryNo === 0 || data.val().entryNo % 2 !== 0) {
+            } else {
+                console.log(data.val().entryNo)
                 var conIdPlusEntId = contestID + "-" + data.val().entryNo;
                 var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
                 var beforeUserName = "'></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
@@ -72,7 +73,7 @@ var manageUsers = {
             firebase.database().ref('contest-info/' + currentContest + "/").on("value", function(data) {
                 $('#company-name-' + currentContest).text(data.val().companyName);
                 $('#company-image-' + currentContest).attr("src", data.val().companyLogoUrl).addClass("co-photo-logo center-block");
-                $('#contest-description-' + currentContest).text(data.val().contestDesc);
+                $('#contest-description-' + currentContest).text(data.val().contestDesc).after("<div id='fb-root'></div>");
                 $('#fb-like').attr("data-href", "https://kathrynherod.github.io/HCB-Project-1/contests/" + currentContest + ".html");
                 $('#co-prize-' + currentContest).text(data.val().contestPrize);
                 $('#co-end-date-' + currentContest).text(data.val().contestEndDate);
