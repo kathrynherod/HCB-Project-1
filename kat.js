@@ -20,12 +20,13 @@
                 if (data.val().entryNo % 2 === 0) {
                     //don't show even children in db bc they are duplicates
                 } else {
+                    var conIdPlusEntId = contestID + "-" + data.val().entryNo;
                     var beforeUserImage = "<li class='list-group-item submissions' id='submissionNumber'><div class='panel panel-default'><div class='panel-heading white'><div class='row'><div class='col-md-3 col-sm-3 col-xs-3'><img class='img-responsive img-rounded usr-photo' id='user-photo' src='";
                     var beforeUserName = "'></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
                     var beforeUserLoc = "</strong></div><div class='col-md-5 col-sm-5 col-xs-5' id='user-location'><i class='fa fa-map-marker' aria-hidden='true'></i><strong>";
                     var beforeUserPhoto = "</strong></div></div><div class='panel-body'><div class='row'><img class='img-responsive contest-photo' src='";
                     var afterPhoto = "'></div><div class='row'><div class='col-md-12 col-sm-12 col-xs-12'><div class='row' id='social-row'><div class='like-button center-this col-md-6 col-sm-6 col-xs-6'><div id='like-entry-no' data-id='";
-                    var afterLikeBtn = "'><i class='fa fa-thumbs-o-up' aria-hidden='true' id='entry-likes-btn'></i>Like This</div></div><div class='col-md-6 col-sm-6 col-xs-6'><p class='center-this' id='entry-likes'>";
+                    var afterLikeBtn = "'><i class='fa fa-thumbs-o-up' aria-hidden='true' id='entry-likes-btn'></i>Like This</div></div><div class='col-md-6 col-sm-6 col-xs-6'><p class='center-this' id='entry-likes' data-id='" + conIdPlusEntId + "'>";
                     var closeIt = "</p></div></div></div></div></div></div></div></li>";
                     var contestUserImage = data.val().entryProfilePic;
                     var contestUserName = data.val().entryUser;
@@ -33,11 +34,8 @@
                     var contestUserPhoto = data.val().entryURL;
                     var contestLikeButton = data.val().entryNo;
                     var contestLikes = data.val().entryLikes + " Likes";
+                    
                     $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto + contestLikeButton + afterLikeBtn + contestLikes + closeIt);
-
-
-
-
                 }
             })
         },
