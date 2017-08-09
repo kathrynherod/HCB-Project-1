@@ -11,11 +11,12 @@
             this.displayContestPhotos();
             this.writeContests();
             this.writeBrowseContests();
+
         },
         displayContestPhotos: function() {
             var contestID = $("#contest-photo-entries").data("id");
 
-            firebase.database().ref('contests/' + contestID).orderByChild("entryTimestamp").on('child_added' || "child_changed", function(data) {
+            firebase.database().ref('contests/' + contestID).orderByChild("entryTimestamp").on("child_added" || "child_changed", function(data) {
                 if (data.val().entryNo % 2 === 0) {
                     //don't show even children in db bc they are duplicates
                 } else {
@@ -23,16 +24,20 @@
                     var beforeUserName = "'></div><div class='col-md-4 col-sm-4 col-xs-4' id='user-name'><strong>";
                     var beforeUserLoc = "</strong></div><div class='col-md-5 col-sm-5 col-xs-5' id='user-location'><i class='fa fa-map-marker' aria-hidden='true'></i><strong>";
                     var beforeUserPhoto = "</strong></div></div><div class='panel-body'><div class='row'><img class='img-responsive contest-photo' src='";
-                    var afterPhoto = "'></div><div class='row'><div class='col-md-12 col-sm-12 col-xs-12'><div class='row' id='social-row'><div class='center-this col-md-6 col-sm-6 col-xs-6 like-button' id='like-button-id-";
-                    var afterLikeBtn = "'><i class='fa fa-thumbs-o-up' aria-hidden='true' id='entry-likes-btn'></i>Like This</div><div class='col-md-6 col-sm-6 col-xs-6'><p class='center-this' id='entry-likes'>";
+                    var afterPhoto = "'></div><div class='row'><div class='col-md-12 col-sm-12 col-xs-12'><div class='row' id='social-row'><div class='like-button center-this col-md-6 col-sm-6 col-xs-6'><div id='like-entry-no' data-id='";
+                    var afterLikeBtn = "'><i class='fa fa-thumbs-o-up' aria-hidden='true' id='entry-likes-btn'></i>Like This</div></div><div class='col-md-6 col-sm-6 col-xs-6'><p class='center-this' id='entry-likes'>";
                     var closeIt = "</p></div></div></div></div></div></div></div></li>";
                     var contestUserImage = data.val().entryProfilePic;
                     var contestUserName = data.val().entryUser;
                     var contestUserLocation = data.val().entryLoc;
                     var contestUserPhoto = data.val().entryURL;
-                    var contestLikeButton = contestID + "-" + data.val().entryNo;
+                    var contestLikeButton = data.val().entryNo;
                     var contestLikes = data.val().entryLikes + " Likes";
                     $("#contest-photo-entries").append(beforeUserImage + contestUserImage + beforeUserName + contestUserName + beforeUserLoc + contestUserLocation + beforeUserPhoto + contestUserPhoto + afterPhoto + contestLikeButton + afterLikeBtn + contestLikes + closeIt);
+
+
+
+
                 }
             })
         },
@@ -141,7 +146,7 @@
                     }
                 })
                 $("#register-btn").hide();
-            })
+            });
 
             //login
             $("#login-btn").on("click", function(e) {
@@ -156,13 +161,13 @@
 
                     }
                 })
-            })
+            });
 
             //logout
             $("#logout-btn").on("click", function() {
                 firebase.auth().signOut();
                 window.location.href = "index.html";
-            })
+            });
 
             //update info
             $("#submit-changes-btn").on("click", function(e, database) {
@@ -187,13 +192,13 @@
                 });
                 $("#update-profile").hide();
 
-            })
+            });
 
             //upload profile pic
             $("#upload-profile-pic").on("change", function(e, database) {
                 e.preventDefault();
                 manageUsers.uploadProfilePic(e);
-            })
+            });
 
             //upload contest pic
             $("#upload-contest-photo").on("change", function(e) {
@@ -204,7 +209,7 @@
                     userInfo = user.toJSON();
                 })
                 manageUsers.uploadContestPic(e, userInfo, contestID);
-            })
+            });
             //create contest
             $("#create-contest-btn").on("click", function(e) {
                 e.preventDefault();
@@ -237,14 +242,11 @@
                     window.location.href = "contests/" + updatedCount + ".html";
 
                 })
-            })
+            });
 
-            //like button
-            $(".like-button").on("click", function(e){
-                
-                console.log("clicked")
-            })
+
         },
+
         writeUserData: function(database, user, userName, email, firstName, lastName, age, zipCode) {
 
             var currentUser = firebase.auth().currentUser;
@@ -431,7 +433,7 @@
                     })
 
                     firebase.database().ref().child("contests-entries-by-userid").once("child_added", function(data) {
-                        firebase.database().ref('contests/' + contestID).push({
+                        firebase.database().ref('contests/' + contestID + "/" + updateEntry).set({
                             entryNo: updateEntry,
                             entryURL: downloadURL,
                             entryUser: userInfo.UserName,
