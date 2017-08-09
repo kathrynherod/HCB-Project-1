@@ -64,7 +64,7 @@
                         <ul class="nav navbar-nav navbar-right scroll">
                             <li><a href="create_contest.html">Create Contest</a></li>
                             <li><a href="browse_contest.html">Browse Contests</a></li>
-                            <li><a href="profile.html">Account</a></li>
+                            <li><a id="act-login-toggle" href="profile.html">My Account</a></li>
                         </ul>
                     </div>
                     <!-- #Nav Ends -->
@@ -87,7 +87,7 @@
                     <img id="profileimageContainer" src="images/placeholder.png" class="img-responsive""></img>
                 </div>
                 <div class="col-md-4">
-                <h5>Edit Your Profile Information</h5>
+                <h5 id="edit-prof-info">Edit Your Profile Information</h5>
                     <form id="update-profile">
                         <div class="form-group">
                             <label for="user-name">User Name</label>
@@ -114,6 +114,7 @@
                         <div class="form-group">
                             <label for="upload-profile-pic">Upload a profile photo</label>
                             <input type="file" id="upload-profile-pic" data="profile-pic">
+                            <p id="photo-upload-progress"></p>
                             
                         </div>
                         <!---
