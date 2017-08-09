@@ -184,9 +184,10 @@ var manageUsers = {
                     var errorMessage = error.message;
                     console.log(errorMessage);
                 });
+            
+            manageUsers.userPromise(email, password);
             var user = firebase.auth().currentUser;
             console.log(user);
-            manageUsers.userPromise(email, password);
             manageUsers.writeUserData(database, user, userName, email, firstName, lastName, age, zipCode);
             firebase.auth().onAuthStateChanged(firebaseUser => {
                 if (firebaseUser) {
