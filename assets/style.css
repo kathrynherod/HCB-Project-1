@@ -338,9 +338,10 @@ p {
     border:1px solid #1992D3;
     box-shadow: 0;
     cursor: pointer;
-
 }
-
+#profileimageContainer{
+    padding-bottom: 15px;
+}
 
 
 
