@@ -316,7 +316,7 @@ p {
     padding-bottom: 10px;
 }
 
-#contest-photo-entries {
+#contest-photo-entries, #user-photo-entries {
     border: 1px solid #ddd;
 }
 #entry-likes {
