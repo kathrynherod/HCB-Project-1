@@ -167,7 +167,7 @@ var manageUsers = {
         //register user
         $("#register-btn").on("click", function(e) {
             e.preventDefault();
-            managerUsers.registerUser();
+            manageUsers.registerUser();
         })
         //login
         $("#login-btn").on("click", function(e) {
