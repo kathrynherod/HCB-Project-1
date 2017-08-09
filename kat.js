@@ -49,11 +49,13 @@ var manageUsers = {
         console.log(pathEnd)
 
         if (pathEnd === "browse_contest.html" || pathEnd === "index.html") {
-            firebase.database().ref('contest-info/').on("value", function(snapshot) {
+            firebase.database().ref('contest-info/').once("child_added", function(snapshot) {
                 var getNumContests = snapshot.numChildren();
+                getNumContests = getNumContests/2;
                 for (i = getNumContests; i > 0; i--) {
-
+                    console.log(i)
                     firebase.database().ref('contest-info/' + i + "/").once("value", function(data) {
+                        console.log(data.val())
                         var startFig = "<figure class='effect-oscar  wowload fadeInUp' id='figure-'" + i + ">";
                         var figLog = "<img src='" + data.val().companyLogoUrl + "' alt='company-logo' /><figcaption>";
                         var conName = "<h2 id='company-name-'" + i + ">" + data.val().companyName + "</h2>";
@@ -303,9 +305,7 @@ var manageUsers = {
             } else {}
         })
         $("#register-btn").hide();
-
     },
-
     userProfile: function(database, currentUser) {
         var currentUser = firebase.auth().currentUser;
 
